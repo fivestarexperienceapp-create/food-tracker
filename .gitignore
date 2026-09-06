@@ -1,0 +1,8 @@
+# Secrets — never commit
+config.js
+
+# Built bundle contains the inlined config, so it carries the keys too.
+# Delete this line if you deploy index.html from the repo (private repos only).
+# index.html
+
+.DS_Store

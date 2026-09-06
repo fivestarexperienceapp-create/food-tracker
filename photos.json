@@ -1,0 +1,86 @@
+{
+  "shakshuka": {
+    "url": "https://images.unsplash.com/photo-1582492710145-d723e0a219f8?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wxMDU3MTQ3fDB8MXxzZWFyY2h8MXx8c2hha3NodWthJTIwZWdncyUyMHNraWxsZXR8ZW58MXwwfHx8MTc4ODcxMDkxNnww&ixlib=rb-4.1.0&q=80&w=1080",
+    "thumb": "https://images.unsplash.com/photo-1582492710145-d723e0a219f8?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wxMDU3MTQ3fDB8MXxzZWFyY2h8MXx8c2hha3NodWthJTIwZWdncyUyMHNraWxsZXR8ZW58MXwwfHx8MTc4ODcxMDkxNnww&ixlib=rb-4.1.0&q=80&w=400",
+    "credit": "Photo by amirali mirhashemian on Unsplash",
+    "href": "https://unsplash.com/@amir_v_ali",
+    "alt": "stainless steel bowl with food"
+  },
+  "salmon-bowl": {
+    "url": "https://images.unsplash.com/photo-1638502182261-7be714a565ce?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wxMDU3MTQ3fDB8MXxzZWFyY2h8MXx8c2FsbW9uJTIwcmljZSUyMGJvd2x8ZW58MXwwfHx8MTc4ODcxMDkxNnww&ixlib=rb-4.1.0&q=80&w=1080",
+    "thumb": "https://images.unsplash.com/photo-1638502182261-7be714a565ce?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wxMDU3MTQ3fDB8MXxzZWFyY2h8MXx8c2FsbW9uJTIwcmljZSUyMGJvd2x8ZW58MXwwfHx8MTc4ODcxMDkxNnww&ixlib=rb-4.1.0&q=80&w=400",
+    "credit": "Photo by Huyen Bui on Unsplash",
+    "href": "https://unsplash.com/@huyenbui30",
+    "alt": "a bowl of food on a wooden board"
+  },
+  "lentil-soup": {
+    "url": "https://images.unsplash.com/photo-1568886875985-ef8a500f8d17?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wxMDU3MTQ3fDB8MXxzZWFyY2h8MXx8bGVudGlsJTIwc291cCUyMGJvd2x8ZW58MXwwfHx8MTc4ODcxMDkxN3ww&ixlib=rb-4.1.0&q=80&w=1080",
+    "thumb": "https://images.unsplash.com/photo-1568886875985-ef8a500f8d17?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wxMDU3MTQ3fDB8MXxzZWFyY2h8MXx8bGVudGlsJTIwc291cCUyMGJvd2x8ZW58MXwwfHx8MTc4ODcxMDkxN3ww&ixlib=rb-4.1.0&q=80&w=400",
+    "credit": "Photo by Louis Hansel on Unsplash",
+    "href": "https://unsplash.com/@louishansel",
+    "alt": "filled bowl"
+  },
+  "cacio": {
+    "url": "https://images.unsplash.com/photo-1588013273468-315fd88ea34c?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wxMDU3MTQ3fDB8MXxzZWFyY2h8MXx8Y2FjaW8lMjBlJTIwcGVwZSUyMHBhc3RhfGVufDF8MHx8fDE3ODg3MTA5MTd8MA&ixlib=rb-4.1.0&q=80&w=1080",
+    "thumb": "https://images.unsplash.com/photo-1588013273468-315fd88ea34c?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wxMDU3MTQ3fDB8MXxzZWFyY2h8MXx8Y2FjaW8lMjBlJTIwcGVwZSUyMHBhc3RhfGVufDF8MHx8fDE3ODg3MTA5MTd8MA&ixlib=rb-4.1.0&q=80&w=400",
+    "credit": "Photo by Zoran Borojevic on Unsplash",
+    "href": "https://unsplash.com/@fresh_studio",
+    "alt": "pasta dish on white ceramic plate"
+  },
+  "adobo": {
+    "url": "https://images.unsplash.com/photo-1609183480237-ccbb2d7c5772?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wxMDU3MTQ3fDB8MXxzZWFyY2h8MXx8Y2hpY2tlbiUyMGFkb2JvfGVufDF8MHx8fDE3ODg3MTA5MTd8MA&ixlib=rb-4.1.0&q=80&w=1080",
+    "thumb": "https://images.unsplash.com/photo-1609183480237-ccbb2d7c5772?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wxMDU3MTQ3fDB8MXxzZWFyY2h8MXx8Y2hpY2tlbiUyMGFkb2JvfGVufDF8MHx8fDE3ODg3MTA5MTd8MA&ixlib=rb-4.1.0&q=80&w=400",
+    "credit": "Photo by Tomoyo S on Unsplash",
+    "href": "https://unsplash.com/@lifetofood",
+    "alt": "cooked food on white ceramic plate"
+  },
+  "broccoli-beans": {
+    "url": "https://images.unsplash.com/photo-1723976525220-a5c4f8a879b6?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wxMDU3MTQ3fDB8MXxzZWFyY2h8MXx8YnJvY2NvbGklMjBmbG9yZXRzJTIwcm9hc3RlZCUyMHRyYXl8ZW58MXwwfHx8MTc4ODcxMDk2OHww&ixlib=rb-4.1.0&q=80&w=1080",
+    "thumb": "https://images.unsplash.com/photo-1723976525220-a5c4f8a879b6?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wxMDU3MTQ3fDB8MXxzZWFyY2h8MXx8YnJvY2NvbGklMjBmbG9yZXRzJTIwcm9hc3RlZCUyMHRyYXl8ZW58MXwwfHx8MTc4ODcxMDk2OHww&ixlib=rb-4.1.0&q=80&w=400",
+    "credit": "Photo by KC Shum on Unsplash",
+    "href": "https://unsplash.com/@kcshum",
+    "alt": "A pile of green broccoli sitting next to each other"
+  },
+  "bulgogi": {
+    "url": "https://images.unsplash.com/photo-1778075188682-c31961bdabcb?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wxMDU3MTQ3fDB8MXxzZWFyY2h8MXx8YnVsZ29naSUyMGJlZWYlMjBrb3JlYW58ZW58MXwwfHx8MTc4ODcxMDkxOHww&ixlib=rb-4.1.0&q=80&w=1080",
+    "thumb": "https://images.unsplash.com/photo-1778075188682-c31961bdabcb?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wxMDU3MTQ3fDB8MXxzZWFyY2h8MXx8YnVsZ29naSUyMGJlZWYlMjBrb3JlYW58ZW58MXwwfHx8MTc4ODcxMDkxOHww&ixlib=rb-4.1.0&q=80&w=400",
+    "credit": "Photo by Harold Castro on Unsplash",
+    "href": "https://unsplash.com/@haroldjp89",
+    "alt": "Gourmet dish with meat, grains, and greens"
+  },
+  "oats": {
+    "url": "https://images.unsplash.com/photo-1541809570-cce873416d94?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wxMDU3MTQ3fDB8MXxzZWFyY2h8MXx8b3Zlcm5pZ2h0JTIwb2F0cyUyMGphcnxlbnwxfDB8fHwxNzg4NzEwOTE4fDA&ixlib=rb-4.1.0&q=80&w=1080",
+    "thumb": "https://images.unsplash.com/photo-1541809570-cce873416d94?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wxMDU3MTQ3fDB8MXxzZWFyY2h8MXx8b3Zlcm5pZ2h0JTIwb2F0cyUyMGphcnxlbnwxfDB8fHwxNzg4NzEwOTE4fDA&ixlib=rb-4.1.0&q=80&w=400",
+    "credit": "Photo by Ella Olsson on Unsplash",
+    "href": "https://unsplash.com/@ellaolsson",
+    "alt": "fruits and cream in clear glass cup"
+  },
+  "coq": {
+    "url": "https://images.unsplash.com/photo-1552723545-1dd9665ace51?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wxMDU3MTQ3fDB8MXxzZWFyY2h8MXx8Y29xJTIwYXUlMjB2aW4lMjBicmFpc2VkJTIwY2hpY2tlbnxlbnwxfDB8fHwxNzg4NzEwOTE5fDA&ixlib=rb-4.1.0&q=80&w=1080",
+    "thumb": "https://images.unsplash.com/photo-1552723545-1dd9665ace51?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wxMDU3MTQ3fDB8MXxzZWFyY2h8MXx8Y29xJTIwYXUlMjB2aW4lMjBicmFpc2VkJTIwY2hpY2tlbnxlbnwxfDB8fHwxNzg4NzEwOTE5fDA&ixlib=rb-4.1.0&q=80&w=400",
+    "credit": "Photo by Ben Lei on Unsplash",
+    "href": "https://unsplash.com/@bleiplays33",
+    "alt": "cooked meat and mushroom"
+  },
+  "harissa-chickpeas": {
+    "url": "https://images.unsplash.com/photo-1568747244129-86a6c6541414?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wxMDU3MTQ3fDB8MXxzZWFyY2h8MXx8cm9hc3RlZCUyMGNoaWNrcGVhcyUyMHNoZWV0JTIwcGFufGVufDF8MHx8fDE3ODg3MTA5MTl8MA&ixlib=rb-4.1.0&q=80&w=1080",
+    "thumb": "https://images.unsplash.com/photo-1568747244129-86a6c6541414?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wxMDU3MTQ3fDB8MXxzZWFyY2h8MXx8cm9hc3RlZCUyMGNoaWNrcGVhcyUyMHNoZWV0JTIwcGFufGVufDF8MHx8fDE3ODg3MTA5MTl8MA&ixlib=rb-4.1.0&q=80&w=400",
+    "credit": "Photo by dimitri.photography on Unsplash",
+    "href": "https://unsplash.com/@dimitriphotography",
+    "alt": "a pan filled with chickpeas and a wooden spoon"
+  },
+  "ramen": {
+    "url": "https://images.unsplash.com/photo-1711435779750-41f53615bac1?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wxMDU3MTQ3fDB8MXxzZWFyY2h8MXx8c2hveXUlMjByYW1lbiUyMGJvd2x8ZW58MXwwfHx8MTc4ODcxMDkxOXww&ixlib=rb-4.1.0&q=80&w=1080",
+    "thumb": "https://images.unsplash.com/photo-1711435779750-41f53615bac1?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wxMDU3MTQ3fDB8MXxzZWFyY2h8MXx8c2hveXUlMjByYW1lbiUyMGJvd2x8ZW58MXwwfHx8MTc4ODcxMDkxOXww&ixlib=rb-4.1.0&q=80&w=400",
+    "credit": "Photo by Poul Hoang on Unsplash",
+    "href": "https://unsplash.com/@poulhoang",
+    "alt": "a bowl of food with chopsticks on a table"
+  },
+  "palak-paneer": {
+    "url": "https://images.unsplash.com/photo-1767114915936-745dd372f1d8?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wxMDU3MTQ3fDB8MXxzZWFyY2h8MXx8c3BpbmFjaCUyMGN1cnJ5JTIwaW5kaWFuJTIwcGFuZWVyfGVufDF8MHx8fDE3ODg3MTA5Njl8MA&ixlib=rb-4.1.0&q=80&w=1080",
+    "thumb": "https://images.unsplash.com/photo-1767114915936-745dd372f1d8?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wxMDU3MTQ3fDB8MXxzZWFyY2h8MXx8c3BpbmFjaCUyMGN1cnJ5JTIwaW5kaWFuJTIwcGFuZWVyfGVufDF8MHx8fDE3ODg3MTA5Njl8MA&ixlib=rb-4.1.0&q=80&w=400",
+    "credit": "Photo by Chetanya Sharma on Unsplash",
+    "href": "https://unsplash.com/@chetanya_designs",
+    "alt": "A delicious indian meal with spinach and flatbread"
+  }
+}
