@@ -96,7 +96,7 @@
       <section style="margin: 0 0 28px;">
         <div style="display: flex; align-items: baseline; justify-content: space-between; gap: 12px; margin: 0 0 12px;">
           <h2 style="margin: 0; font-family: 'Instrument Serif', Georgia, serif; font-weight: 400; font-size: 23px; letter-spacing: -0.01em;">Trending this week</h2>
-          <span style="font-family: 'DM Mono', ui-monospace, monospace; font-size: 9px; letter-spacing: 0.14em; text-transform: uppercase; color: #8A8075;">{{ trendingCount }}</span>
+          <button onClick="{{ shuffleFeed }}" style="flex: none; padding: 7px 12px; border-radius: 999px; border: 1px solid #DCD2C4; background: #FFFFFF; font-family: 'DM Mono', ui-monospace, monospace; font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; white-space: nowrap;" style-hover="background: #F2E7D9; border-color: var(--mise-accent, #C2542F);">{{ shuffleLabel }}</button>
         </div>
         <div style="display: flex; gap: 12px; overflow-x auto; overflow-x: auto; scroll-snap-type: x mandatory; margin: 0 -20px; padding: 0 20px 6px;">
           <sc-for list="{{ trending }}" as="r" hint-placeholder-count="3">
@@ -128,8 +128,9 @@
       <section style="margin: 0 0 28px;">
         <div style="display: flex; align-items: baseline; justify-content: space-between; gap: 12px; margin: 0 0 6px;">
           <h2 style="margin: 0; font-family: 'Instrument Serif', Georgia, serif; font-weight: 400; font-size: 23px; letter-spacing: -0.01em;">Cook once in your life</h2>
+          <button onClick="{{ shuffleFeed }}" style="flex: none; padding: 7px 12px; border-radius: 999px; border: 1px solid #DCD2C4; background: #FFFFFF; font-family: 'DM Mono', ui-monospace, monospace; font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; white-space: nowrap;" style-hover="background: #F2E7D9; border-color: var(--mise-accent, #C2542F);">{{ shuffleLabel }}</button>
         </div>
-        <p style="margin: 0 0 14px; font-size: 12.5px; line-height: 1.5; color: #7A7166; max-width: 34ch;">Canon dishes worth the effort. Not the healthiest — the ones that teach you technique.</p>
+        <p style="margin: 0 0 14px; font-size: 12.5px; line-height: 1.5; color: #7A7166; max-width: 34ch;">The plates worth learning properly — technique you keep. Showing {{ classicCount }}; shuffle for the rest.</p>
         <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px;">
           <sc-for list="{{ classics }}" as="r" hint-placeholder-count="4">
             <button onClick="{{ r.open }}" style="display: block; width: 100%; text-align: left; background: #FFFFFF; border: 1px solid #E9E1D5; border-radius: 16px; overflow: hidden; padding: 0;" style-hover="border-color: #D8CBB8;">
@@ -827,250 +828,346 @@ const GRADES = [
 const DIFF = ['', 'Beginner', 'Easy', 'Some technique', 'Practised', 'Project cook'];
 
 const RAW = [
-  { id: 'shakshuka', name: 'Shakshuka with Whipped Feta', cuisine: 'Levantine',
-    tagline: 'Eggs poached into a smoky pepper stew, cooled by salty whipped feta and torn herbs.',
-    kcal: 412, protein: 22, carbs: 24, fat: 26, fiber: 6, sugar: 9, satfat: 9, sodium: 780,
-    difficulty: 2, prep: 10, cook: 25, servings: 2, cats: ['trending', 'once'],
+  { id: 'smash-burgers', name: 'Smash Burgers with Sharp Cheddar', cuisine: 'American',
+    tagline: 'Thin patties pressed onto a screaming-hot pan. Twenty minutes, 42 g of protein.',
+    kcal: 720, protein: 42, carbs: 34, fat: 44, fiber: 2, sugar: 8, satfat: 18, sodium: 980,
+    difficulty: 2, prep: 10, cook: 10, servings: 2, cats: ['trending', 'once'],
     ing: [
-      { n: 'Ripe tomatoes', q: '1 1/4 lb', r: 'none', c: 2.6, p: 2.6 },
-      { n: 'Red bell peppers', q: '2', r: 'none', c: 1.8, p: 1.8 },
-      { n: 'Eggs', q: '4', r: 'none', c: 1.2, p: 4.29 },
-      { n: 'Feta', q: '4 oz', r: 'none', c: 2, p: 4.99 },
-      { n: 'Harissa paste', q: '1 tbsp', r: 'moderate', c: 0.45, p: 5.49, a: 'E202 potassium sorbate', note: 'Most jarred harissa is preserved. A paste listing only chile, oil, garlic and salt lifts this dish a full grade.' },
-      { n: 'Cumin seeds', q: '1 tsp', r: 'none', c: 0.15, p: 3.99 },
+      { n: 'Ground beef, 80/20', q: '1 lb', r: 'none', c: 6.99, p: 6.99 },
+      { n: 'Brioche buns', q: '2', r: 'low', c: 1.5, p: 4.49, a: 'E471 emulsifiers, E282 preservative', note: 'Shelf-stable buns carry dough conditioners and mold inhibitor. Bakery buns are usually flour, butter, egg, yeast.' },
+      { n: 'Sharp cheddar', q: '2 oz', r: 'none', c: 1.2, p: 4.99 },
+      { n: 'Yellow onion', q: '1/2', r: 'none', c: 0.4, p: 0.8 },
+      { n: 'Dill pickles', q: '4 slices', r: 'low', c: 0.6, p: 3.99, a: 'Yellow 5, sodium benzoate', note: 'The dye is cosmetic. Refrigerated pickles usually skip both.' },
+      { n: 'Mayonnaise', q: '2 tbsp', r: 'low', c: 0.25, p: 4.49, a: 'Calcium disodium EDTA', note: 'A chelator that keeps the oil from going rancid. Olive-oil mayo brands often leave it out.' },
+      { n: 'Ketchup', q: '1 tbsp', r: 'low', c: 0.1, p: 3.29, a: 'High-fructose corn syrup', note: 'Sugar-first ketchup. The "simply" versions swap in cane sugar at similar cost.' },
+      { n: 'Butter, for the buns', q: '1 tbsp', r: 'none', c: 0.25, p: 4.49 }
+    ],
+    steps: [
+      'Divide the beef into four loose balls. Do not pack them \u2014 handling makes the patties tight.',
+      'Get a cast-iron pan or flat griddle ripping hot. Butter and toast the cut buns, then set aside.',
+      'Press each ball flat with a stiff spatula and hold for 10 seconds. Salt, then leave alone for 2 minutes until the edge is lace-brown.',
+      'Flip, cheese on immediately, 45 seconds more. Stack two patties per bun with pickle, onion and the sauces.'
+    ] },
+  { id: 'garlic-salmon', name: 'Garlic Butter Salmon & Green Beans', cuisine: 'American',
+    tagline: 'One pan, fifteen minutes, nothing processed in it. The weeknight default.',
+    kcal: 480, protein: 40, carbs: 12, fat: 30, fiber: 4, sugar: 4, satfat: 10, sodium: 420,
+    difficulty: 1, prep: 10, cook: 15, servings: 2, cats: ['trending', 'prep'],
+    ing: [
+      { n: 'Salmon fillets', q: '2 \u00d7 6 oz', r: 'none', c: 12.99, p: 12.99 },
+      { n: 'Green beans', q: '12 oz', r: 'none', c: 2.99, p: 2.99 },
+      { n: 'Butter', q: '3 tbsp', r: 'none', c: 0.75, p: 4.49 },
+      { n: 'Garlic', q: '4 cloves', r: 'none', c: 0.4, p: 0.79 },
+      { n: 'Lemon', q: '1', r: 'none', c: 0.79, p: 0.79 },
+      { n: 'Olive oil', q: '1 tbsp', r: 'none', c: 0.3, p: 9.99 },
+      { n: 'Parsley', q: '1/4 bunch', r: 'none', c: 0.4, p: 1.29 }
+    ],
+    steps: [
+      'Pat the salmon bone dry and salt it 10 minutes ahead \u2014 that is the whole trick to a crisp skin.',
+      'Sear skin-down in oil, 6 minutes, undisturbed. The fillet releases on its own when it is ready.',
+      'Flip, add butter and smashed garlic, and spoon the foaming butter over for 90 seconds.',
+      'Blister the green beans in the same pan with the leftover garlic butter. Lemon over everything.'
+    ] },
+  { id: 'sheetpan-chicken', name: 'Sheet-Pan Chicken Thighs, Broccoli & Potatoes', cuisine: 'American',
+    tagline: 'Everything on one tray, nothing from a packet. The best-scoring dinner here.',
+    kcal: 520, protein: 40, carbs: 32, fat: 26, fiber: 6, sugar: 5, satfat: 7, sodium: 620,
+    difficulty: 1, prep: 10, cook: 40, servings: 4, cats: ['prep', 'trending'],
+    ing: [
+      { n: 'Chicken thighs, bone-in skin-on', q: '2 1/2 lb', r: 'none', c: 7.49, p: 7.49 },
+      { n: 'Baby potatoes', q: '1 1/2 lb', r: 'none', c: 3.49, p: 3.49 },
+      { n: 'Broccoli', q: '1 lb', r: 'none', c: 2.49, p: 2.49 },
+      { n: 'Olive oil', q: '3 tbsp', r: 'none', c: 0.8, p: 9.99 },
+      { n: 'Garlic', q: '1 head', r: 'none', c: 0.79, p: 0.79 },
+      { n: 'Lemon', q: '1', r: 'none', c: 0.79, p: 0.79 },
+      { n: 'Paprika, salt, pepper', q: '1 tbsp total', r: 'none', c: 0.4, p: 9.98 }
+    ],
+    steps: [
+      'Halve the potatoes and start them alone at 425\u00b0F with oil and salt for 15 minutes \u2014 they need the head start.',
+      'Push them aside, add the thighs skin-up and the whole garlic cloves, and roast 20 minutes.',
+      'Add the broccoli, roast 10 minutes more until the florets char and the thigh skin is glass-crisp.',
+      'Lemon over the tray off the heat. Portion into four boxes; it reheats without going sad.'
+    ] },
+  { id: 'honey-chicken-bowls', name: 'Honey Mustard Chicken Meal-Prep Bowls', cuisine: 'American',
+    tagline: 'Four boxes, 44 g of protein each, done in 45 minutes on a Sunday.',
+    kcal: 480, protein: 44, carbs: 44, fat: 14, fiber: 5, sugar: 12, satfat: 3, sodium: 580,
+    difficulty: 1, prep: 15, cook: 30, servings: 4, cats: ['prep', 'trending'],
+    ing: [
+      { n: 'Chicken thighs, boneless', q: '2 lb', r: 'none', c: 7.99, p: 7.99 },
+      { n: 'Brown rice', q: '1 1/2 cups', r: 'none', c: 1.2, p: 4.49 },
+      { n: 'Broccoli', q: '1 lb', r: 'none', c: 2.49, p: 2.49 },
+      { n: 'Bottled honey mustard', q: '1/3 cup', r: 'moderate', c: 0.9, p: 3.99, a: 'HFCS, E415 xanthan gum, E202', note: 'Two tablespoons of real mustard, honey and vinegar does the same job with nothing added.' },
       { n: 'Olive oil', q: '2 tbsp', r: 'none', c: 0.55, p: 9.99 },
-      { n: 'Flatbread, to serve', q: '2', r: 'low', c: 1.4, p: 3.49, a: 'E471 emulsifier', note: 'Long-life flatbread carries emulsifiers and dough conditioners. Bakery or homemade skips both.' }
+      { n: 'Lemon', q: '1', r: 'none', c: 0.79, p: 0.79 },
+      { n: 'Paprika & garlic powder', q: '1 tsp each', r: 'none', c: 0.3, p: 5.98 }
     ],
     steps: [
-      'Toast the cumin in olive oil until it crackles, then soften the sliced peppers with a good pinch of salt for 8 minutes.',
-      'Add the harissa, cook it out for a minute, then the chopped tomatoes. Simmer 12\u201315 minutes until it holds a spoon-drawn trench.',
-      'Whip the feta with a splash of the pepper oil until spreadable. Keep it cold.',
-      'Make four wells, crack in the eggs, cover and cook 5\u20136 minutes for set whites and loose yolks.',
-      'Spoon the feta over in clouds, scatter herbs, and eat straight from the pan with the flatbread.'
+      'Start the brown rice \u2014 it takes 40 minutes and everything else beats it.',
+      'Toss the thighs in half the honey mustard, paprika and garlic powder. Roast at 425\u00b0F for 25 minutes.',
+      'Steam or roast the broccoli until just tender, no further; it has four days of reheating ahead.',
+      'Build four boxes: rice, sliced chicken, broccoli. Remaining sauce and lemon in a lid pot.'
     ] },
-  { id: 'salmon-bowl', name: 'Miso-Butter Salmon Rice Bowl', cuisine: 'Japanese',
-    tagline: 'Fifteen minutes, one broiler tray: glazed salmon over vinegared rice with cucumber.',
-    kcal: 546, protein: 38, carbs: 48, fat: 22, fiber: 5, sugar: 6, satfat: 7, sodium: 690,
-    difficulty: 2, prep: 10, cook: 15, servings: 2, cats: ['trending'],
+  { id: 'beef-broccoli', name: 'Beef & Broccoli Stir-Fry', cuisine: 'Chinese-American',
+    tagline: 'Faster than delivery and you control the sugar. Ten minutes in the pan.',
+    kcal: 420, protein: 36, carbs: 26, fat: 20, fiber: 4, sugar: 10, satfat: 6, sodium: 890,
+    difficulty: 2, prep: 20, cook: 10, servings: 4, cats: ['trending'],
     ing: [
-      { n: 'Salmon fillets', q: '2 \u00d7 5 oz', r: 'none', c: 11, p: 11 },
-      { n: 'Short-grain rice', q: '1 cup', r: 'none', c: 0.7, p: 4.99 },
-      { n: 'White miso', q: '2 tbsp', r: 'none', c: 0.6, p: 5.99 },
-      { n: 'Unsalted butter', q: '1 1/2 tbsp', r: 'none', c: 0.35, p: 4.49 },
-      { n: 'Rice vinegar', q: '1 tbsp', r: 'none', c: 0.15, p: 3.29 },
-      { n: 'Cucumber', q: '1', r: 'none', c: 0.99, p: 0.99 },
-      { n: 'Nori sheets', q: '2', r: 'none', c: 0.5, p: 4.49 },
-      { n: 'Bottled teriyaki glaze (optional)', q: '1 tbsp', r: 'moderate', c: 0.3, p: 3.99, a: 'Glucose-fructose syrup, E415', note: 'Skip it \u2014 miso, butter and a little honey give you the same lacquer without the syrup.' }
+      { n: 'Flank steak', q: '1 1/4 lb', r: 'none', c: 11.99, p: 11.99 },
+      { n: 'Broccoli crowns', q: '1 1/2 lb', r: 'none', c: 3.49, p: 3.49 },
+      { n: 'Soy sauce', q: '1/3 cup', r: 'low', c: 0.55, p: 3.99, a: 'E202', note: 'Naturally brewed soy lists four ingredients. Skip anything hydrolyzed or colored.' },
+      { n: 'Brown sugar', q: '2 tbsp', r: 'none', c: 0.15, p: 2.99 },
+      { n: 'Cornstarch', q: '1 tbsp', r: 'none', c: 0.1, p: 2.29 },
+      { n: 'Garlic & ginger', q: '4 cloves / 1 tbsp', r: 'none', c: 0.65, p: 1.58 },
+      { n: 'Sesame oil', q: '1 tbsp', r: 'none', c: 0.35, p: 5.99 },
+      { n: 'White rice', q: '1 1/2 cups', r: 'none', c: 1.05, p: 4.99 }
     ],
     steps: [
-      'Rinse the rice until the water runs clear, then cook it. Fold through the vinegar while warm and cover.',
-      'Mash the miso into soft butter. Smear it thickly over the salmon.',
-      'Broil 8\u201310 minutes on high, close to the element, until the glaze blisters dark at the edges.',
-      'Build the bowls: rice, salmon broken into big flakes, shaved cucumber, torn nori.'
+      'Slice the flank thin against the grain and toss with cornstarch \u2014 that is what keeps it velvety.',
+      'Blanch the broccoli 90 seconds and drain hard. Wet broccoli steams instead of searing.',
+      'Sear the beef in two batches in a smoking-hot pan, 60 seconds a side, and pull it out.',
+      'Garlic and ginger in for 20 seconds, then soy, sugar and a splash of water. Return everything and toss until glossy.'
     ] },
-  { id: 'lentil-soup', name: 'Green Lentil & Preserved Lemon Soup', cuisine: 'North African',
-    tagline: 'A bag of lentils, one pot, four days of lunch. Preserved lemon keeps it bright.',
-    kcal: 318, protein: 18, carbs: 44, fat: 7, fiber: 14, sugar: 6, satfat: 1.2, sodium: 520,
-    difficulty: 1, prep: 10, cook: 35, servings: 4, cats: ['prep'],
+  { id: 'turkey-tacos', name: 'Ground Turkey Taco Bowls', cuisine: 'Tex-Mex',
+    tagline: 'Weeknight bowls the whole house eats. Skip the packet and it scores a grade higher.',
+    kcal: 440, protein: 34, carbs: 38, fat: 18, fiber: 7, sugar: 6, satfat: 5, sodium: 780,
+    difficulty: 1, prep: 15, cook: 15, servings: 4, cats: ['trending', 'prep'],
     ing: [
-      { n: 'Green lentils', q: '1 1/2 cups', r: 'none', c: 1.6, p: 2.99 },
-      { n: 'Onions', q: '2', r: 'none', c: 1, p: 1 },
-      { n: 'Carrots', q: '3', r: 'none', c: 0.75, p: 1.99 },
-      { n: 'Preserved lemon', q: '1', r: 'none', c: 1.1, p: 6.99 },
-      { n: 'Ground cumin & coriander', q: '2 tsp each', r: 'none', c: 0.4, p: 6.98 },
-      { n: 'Vegetable stock cube', q: '1', r: 'low', c: 0.3, p: 2.99, a: 'E621 monosodium glutamate', note: 'Most cubes are salt plus MSG. A yeast-extract-only paste or homemade stock drops the sodium by a third.' },
-      { n: 'Flat-leaf parsley', q: '1 bunch', r: 'none', c: 1.29, p: 1.29 },
-      { n: 'Olive oil', q: '2 tbsp', r: 'none', c: 0.55, p: 9.99 }
+      { n: 'Ground turkey, 93%', q: '1 1/4 lb', r: 'none', c: 6.49, p: 6.49 },
+      { n: 'Taco seasoning packet', q: '1', r: 'moderate', c: 0.99, p: 0.99, a: 'Maltodextrin, silicon dioxide, "natural flavor"', note: 'Two teaspoons each of chili powder, cumin and paprika plus salt replaces it exactly, for pennies.' },
+      { n: 'Black beans', q: '1 can (15 oz)', r: 'none', c: 1.29, p: 1.29 },
+      { n: 'White rice', q: '1 1/2 cups', r: 'none', c: 1.05, p: 4.99 },
+      { n: 'Romaine', q: '1 head', r: 'none', c: 2.49, p: 2.49 },
+      { n: 'Shredded Monterey Jack', q: '4 oz', r: 'low', c: 2.2, p: 4.99, a: 'Potato starch, natamycin', note: 'Bagged shreds are coated to stop caking. A block grated yourself melts better anyway.' },
+      { n: 'Salsa', q: '1 cup', r: 'none', c: 1.6, p: 3.99 },
+      { n: 'Sour cream', q: '1/4 cup', r: 'none', c: 0.6, p: 2.99 }
     ],
     steps: [
-      'Sweat the diced onion and carrot in oil for 10 minutes without coloring. Add the spices and cook 60 seconds.',
-      'Add the lentils and 6 cups of stock. Simmer 30 minutes until the lentils collapse at the edges.',
-      'Blend a third of the soup and stir it back for body. Chop the preserved lemon fine and fold it through off the heat.',
-      'Cool fast, portion into four jars, fridge for four days or freeze for three months.'
+      'Brown the turkey hard and do not stir for the first three minutes \u2014 lean meat needs the crust for flavor.',
+      'Add the seasoning and a half cup of water, then simmer until it tightens back up.',
+      'Warm the drained beans through with a pinch of cumin.',
+      'Build bowls over rice with shredded romaine, cheese, salsa and a spoon of sour cream.'
+    ] },
+  { id: 'burrito-bowls', name: 'Chicken Burrito Bowls', cuisine: 'Tex-Mex',
+    tagline: 'Cheaper than the chain, and you can taste the lime. Four boxes at once.',
+    kcal: 560, protein: 42, carbs: 56, fat: 18, fiber: 9, sugar: 6, satfat: 5, sodium: 820,
+    difficulty: 2, prep: 20, cook: 25, servings: 4, cats: ['prep', 'trending'],
+    ing: [
+      { n: 'Chicken thighs, boneless', q: '1 3/4 lb', r: 'none', c: 6.99, p: 6.99 },
+      { n: 'White rice', q: '1 1/2 cups', r: 'none', c: 1.05, p: 4.99 },
+      { n: 'Black beans', q: '2 cans (15 oz)', r: 'none', c: 2.58, p: 2.58 },
+      { n: 'Frozen corn', q: '1 cup', r: 'none', c: 0.6, p: 2.49 },
+      { n: 'Shredded cheese', q: '4 oz', r: 'low', c: 2.2, p: 4.99, a: 'Potato starch, natamycin', note: 'Same anti-caking coating as any bagged shred. Grate a block if it bothers you.' },
+      { n: 'Salsa', q: '1 cup', r: 'none', c: 1.6, p: 3.99 },
+      { n: 'Limes', q: '2', r: 'none', c: 0.7, p: 0.7 },
+      { n: 'Cilantro', q: '1 bunch', r: 'none', c: 1.29, p: 1.29 },
+      { n: 'Cumin & chili powder', q: '2 tsp each', r: 'none', c: 0.4, p: 6.98 }
+    ],
+    steps: [
+      'Rub the thighs with cumin, chili powder and salt. Sear in a hot pan, 6 minutes a side, then rest and chop.',
+      'Cook the rice, then fold through lime juice and half the cilantro off the heat.',
+      'Warm the beans with their own liquid and a pinch of cumin so they do not dry out in the box.',
+      'Char the corn in the chicken pan for two minutes. Build the bowls and keep the salsa separate until you eat.'
+    ] },
+  { id: 'chicken-parm', name: 'Baked Chicken Parmesan', cuisine: 'Italian-American',
+    tagline: 'Baked, not fried, so it stays a weeknight. Forty-eight grams of protein a plate.',
+    kcal: 620, protein: 48, carbs: 42, fat: 26, fiber: 4, sugar: 10, satfat: 11, sodium: 1120,
+    difficulty: 3, prep: 20, cook: 25, servings: 4, cats: ['trending', 'once'],
+    ing: [
+      { n: 'Chicken breasts', q: '2 lb', r: 'none', c: 9.99, p: 9.99 },
+      { n: 'Italian breadcrumbs', q: '1 cup', r: 'moderate', c: 1, p: 2.49, a: 'E282 calcium propionate, "natural flavors"', note: 'Blitz stale bread with dried oregano instead and the dish loses nothing.' },
+      { n: 'Marinara', q: '1 jar (24 oz)', r: 'low', c: 2.99, p: 2.99, a: 'Citric acid', note: 'Acidity regulator for shelf life. A jar listing tomatoes, oil, garlic, basil and salt is the one to buy.' },
+      { n: 'Mozzarella', q: '8 oz', r: 'none', c: 3.99, p: 3.99 },
+      { n: 'Parmesan', q: '2 oz', r: 'none', c: 2.5, p: 7.99 },
+      { n: 'Eggs', q: '2', r: 'none', c: 0.6, p: 4.29 },
+      { n: 'Olive oil', q: '2 tbsp', r: 'none', c: 0.55, p: 9.99 },
+      { n: 'Spaghetti', q: '8 oz', r: 'none', c: 1.1, p: 2.49 }
+    ],
+    steps: [
+      'Butterfly the breasts and pound them to an even half inch. Uneven cutlets are why chicken parm goes dry.',
+      'Egg, then breadcrumbs mixed with half the parmesan. Press the coating on properly.',
+      'Bake on an oiled rack at 425\u00b0F for 18 minutes \u2014 the rack is what keeps the underside crisp.',
+      'Sauce and mozzarella on top, back in for 7 minutes until blistered. Rest 5 minutes before cutting.'
+    ] },
+  { id: 'steak-potatoes', name: 'Cast-Iron Ribeye & Crispy Potatoes', cuisine: 'American',
+    tagline: 'The dish to learn properly: dry surface, hot iron, butter at the end, rest it.',
+    kcal: 780, protein: 46, carbs: 34, fat: 52, fiber: 4, sugar: 3, satfat: 20, sodium: 620,
+    difficulty: 3, prep: 15, cook: 25, servings: 2, cats: ['once', 'trending'],
+    ing: [
+      { n: 'Ribeye steaks', q: '2 \u00d7 10 oz', r: 'none', c: 21.99, p: 21.99 },
+      { n: 'Yukon gold potatoes', q: '1 1/2 lb', r: 'none', c: 2.49, p: 2.49 },
+      { n: 'Butter', q: '2 tbsp', r: 'none', c: 0.5, p: 4.49 },
+      { n: 'Garlic', q: '4 cloves', r: 'none', c: 0.4, p: 0.79 },
+      { n: 'Fresh thyme', q: '4 sprigs', r: 'none', c: 1.99, p: 1.99 },
+      { n: 'Neutral oil', q: '2 tbsp', r: 'none', c: 0.2, p: 4.99 },
+      { n: 'Kosher salt & black pepper', q: 'to season', r: 'none', c: 0.15, p: 4.49 }
+    ],
+    steps: [
+      'Salt the steaks and leave them uncovered in the fridge for an hour. A dry surface browns; a wet one steams.',
+      'Parboil the halved potatoes 8 minutes, drain, then rough them up in the colander for edges to crisp.',
+      'Roast the potatoes in oil at 425\u00b0F for 30 minutes while the pan heats until it just smokes.',
+      'Sear the steaks 3 minutes a side, then butter, garlic and thyme, basting 60 seconds.',
+      'Rest 8 minutes on a board. Slice against the grain and spoon the pan butter over.'
+    ] },
+  { id: 'meatloaf', name: 'Glazed Meatloaf', cuisine: 'American',
+    tagline: 'Six portions, sandwiches tomorrow. The cheapest protein per dollar in the app.',
+    kcal: 480, protein: 34, carbs: 22, fat: 28, fiber: 2, sugar: 12, satfat: 11, sodium: 860,
+    difficulty: 2, prep: 15, cook: 60, servings: 6, cats: ['once', 'prep'],
+    ing: [
+      { n: 'Ground beef, 85/15', q: '2 lb', r: 'none', c: 11.99, p: 11.99 },
+      { n: 'Panko', q: '1 cup', r: 'none', c: 0.9, p: 3.49 },
+      { n: 'Eggs', q: '2', r: 'none', c: 0.6, p: 4.29 },
+      { n: 'Yellow onion', q: '1', r: 'none', c: 0.8, p: 0.8 },
+      { n: 'Ketchup', q: '1/2 cup', r: 'low', c: 0.55, p: 3.29, a: 'High-fructose corn syrup', note: 'It is the glaze, so it matters here. Cane-sugar ketchup browns the same.' },
+      { n: 'Worcestershire', q: '1 tbsp', r: 'low', c: 0.15, p: 4.29, a: 'E150 caramel color', note: 'Colorant only \u2014 no flavor contribution.' },
+      { n: 'Brown sugar', q: '2 tbsp', r: 'none', c: 0.15, p: 2.99 },
+      { n: 'Whole milk', q: '1/4 cup', r: 'none', c: 0.2, p: 4.29 }
+    ],
+    steps: [
+      'Soak the panko in the milk for five minutes. That paste is the difference between tender and bouncy.',
+      'Sweat the diced onion soft and let it cool before it goes near the meat.',
+      'Mix everything with your hands until just combined, then shape free-form on a sheet pan \u2014 no loaf tin, so the sides brown.',
+      'Bake at 375\u00b0F for 40 minutes, glaze with the ketchup and brown sugar, then 20 minutes more. Rest 10.'
+    ] },
+  { id: 'pot-roast', name: 'Sunday Pot Roast', cuisine: 'American',
+    tagline: 'Four hours of doing nothing. Feeds six and reheats better than it started.',
+    kcal: 560, protein: 44, carbs: 28, fat: 30, fiber: 4, sugar: 8, satfat: 12, sodium: 760,
+    difficulty: 3, prep: 25, cook: 210, servings: 6, cats: ['once'],
+    ing: [
+      { n: 'Chuck roast', q: '3 1/2 lb', r: 'none', c: 17.99, p: 17.99 },
+      { n: 'Carrots', q: '1 lb', r: 'none', c: 1.99, p: 1.99 },
+      { n: 'Yukon potatoes', q: '2 lb', r: 'none', c: 3.29, p: 3.29 },
+      { n: 'Yellow onions', q: '2', r: 'none', c: 1.6, p: 1.6 },
+      { n: 'Beef broth', q: '4 cups', r: 'low', c: 2.49, p: 2.49, a: 'Yeast extract, "natural flavor"', note: 'Carton broth is mostly salt and yeast extract. Low-sodium versions let you season it yourself.' },
+      { n: 'Tomato paste', q: '2 tbsp', r: 'none', c: 0.3, p: 1.29 },
+      { n: 'Red wine', q: '1 cup', r: 'none', c: 3, p: 9.99 },
+      { n: 'Fresh thyme & bay', q: '1 bundle', r: 'none', c: 1.99, p: 1.99 }
+    ],
+    steps: [
+      'Salt the roast an hour ahead. Dry it, then brown every face hard in a Dutch oven \u2014 this is 80% of the flavor.',
+      'Onions in the fat until deeply colored, then tomato paste for two minutes, then deglaze with the wine.',
+      'Broth to halfway up the meat, lid on, 325\u00b0F for 2.5 hours.',
+      'Add carrots and potatoes, another hour until a fork twists out with no resistance.',
+      'Skim the fat, reduce the liquid on the stove until it coats a spoon, and shred the meat back into it.'
+    ] },
+  { id: 'fried-chicken', name: 'Buttermilk Fried Chicken', cuisine: 'American',
+    tagline: 'Once a season, done properly. Brine overnight; the frying is the easy part.',
+    kcal: 690, protein: 42, carbs: 38, fat: 38, fiber: 1, sugar: 4, satfat: 9, sodium: 1080,
+    difficulty: 4, prep: 30, cook: 30, servings: 4, cats: ['once'],
+    ing: [
+      { n: 'Chicken, jointed', q: '3 1/2 lb', r: 'none', c: 8.99, p: 8.99 },
+      { n: 'Buttermilk', q: '2 cups', r: 'none', c: 1.99, p: 2.99 },
+      { n: 'All-purpose flour', q: '2 cups', r: 'none', c: 0.6, p: 3.49 },
+      { n: 'Peanut or canola oil', q: '6 cups', r: 'none', c: 5.99, p: 5.99 },
+      { n: 'Paprika, garlic powder, cayenne', q: '1 tbsp each', r: 'none', c: 0.6, p: 8.97 },
+      { n: 'Kosher salt', q: '2 tbsp', r: 'none', c: 0.15, p: 4.49 },
+      { n: 'Black pepper', q: '1 tbsp', r: 'none', c: 0.2, p: 4.49 }
+    ],
+    steps: [
+      'Brine the chicken in buttermilk with a tablespoon of salt, overnight. Non-negotiable for juicy dark meat.',
+      'Season the flour heavily \u2014 it is the only seasoning the crust gets. Splash in buttermilk and rub it to shaggy clumps.',
+      'Dredge, then rest the pieces on a rack 15 minutes so the coating hydrates and stops falling off.',
+      'Fry at 325\u00b0F, dark meat first, 12\u201314 minutes, in batches that never crowd the pot.',
+      'Rack, never paper towel. Salt the second it comes out.'
+    ] },
+  { id: 'mac-chicken', name: 'Baked Mac & Cheese with Chicken', cuisine: 'American',
+    tagline: 'A real bechamel, six portions. The processed-cheese shortcut is what costs it points.',
+    kcal: 640, protein: 38, carbs: 52, fat: 30, fiber: 2, sugar: 7, satfat: 16, sodium: 940,
+    difficulty: 2, prep: 20, cook: 30, servings: 6, cats: ['once', 'prep'],
+    ing: [
+      { n: 'Elbow macaroni', q: '1 lb', r: 'none', c: 1.49, p: 1.49 },
+      { n: 'Sharp cheddar', q: '12 oz', r: 'none', c: 5.99, p: 5.99 },
+      { n: 'Whole milk', q: '3 cups', r: 'none', c: 0.9, p: 4.29 },
+      { n: 'Butter', q: '4 tbsp', r: 'none', c: 1, p: 4.49 },
+      { n: 'All-purpose flour', q: '1/4 cup', r: 'none', c: 0.15, p: 3.49 },
+      { n: 'Rotisserie chicken, shredded', q: '1 lb', r: 'moderate', c: 6.99, p: 6.99, a: 'Sodium phosphates, carrageenan', note: 'Supermarket birds are injected with a phosphate brine. Roasting your own thighs costs less and skips it.' },
+      { n: 'American cheese slices', q: '4', r: 'high', c: 1, p: 3.99, a: 'Sodium citrate, sodium phosphate, sorbic acid, coloring', note: 'They melt smooth because of the emulsifying salts. A spoon of the pasta water in the bechamel does the same job.' },
+      { n: 'Panko', q: '1/2 cup', r: 'none', c: 0.45, p: 3.49 }
+    ],
+    steps: [
+      'Boil the macaroni two minutes shy of the box. It finishes in the oven.',
+      'Butter and flour into a blond roux, then the milk in stages, whisking to a pourable sauce.',
+      'Off the heat, cheese in by the handful. Sauce above 180\u00b0F splits \u2014 that is why people reach for the slices.',
+      'Fold in the pasta and chicken, top with buttered panko, bake at 375\u00b0F for 25 minutes until it bubbles at the edge.'
+    ] },
+  { id: 'turkey-chili', name: 'Turkey Chili', cuisine: 'American',
+    tagline: 'Six portions, ten grams of fiber, freezes for a month. The best-value prep here.',
+    kcal: 380, protein: 32, carbs: 34, fat: 12, fiber: 10, sugar: 8, satfat: 3, sodium: 720,
+    difficulty: 1, prep: 15, cook: 45, servings: 6, cats: ['prep', 'once'],
+    ing: [
+      { n: 'Ground turkey, 93%', q: '2 lb', r: 'none', c: 9.99, p: 9.99 },
+      { n: 'Kidney beans', q: '2 cans (15 oz)', r: 'none', c: 2.38, p: 2.38 },
+      { n: 'Crushed tomatoes', q: '1 can (28 oz)', r: 'none', c: 2.29, p: 2.29 },
+      { n: 'Yellow onion', q: '1', r: 'none', c: 0.8, p: 0.8 },
+      { n: 'Bell peppers', q: '2', r: 'none', c: 2.98, p: 2.98 },
+      { n: 'Chili powder & cumin', q: '2 tbsp / 1 tbsp', r: 'none', c: 0.6, p: 6.98 },
+      { n: 'Chicken broth', q: '2 cups', r: 'low', c: 1.25, p: 2.49, a: 'Yeast extract', note: 'Buy the low-sodium carton; chili gets plenty of salt from everything else.' },
+      { n: 'Tomato paste', q: '2 tbsp', r: 'none', c: 0.3, p: 1.29 }
+    ],
+    steps: [
+      'Brown the turkey in a dry pot until it sticks and releases \u2014 lean meat needs that fond.',
+      'Onion and peppers in, softened, then the spices and tomato paste cooked out for two full minutes.',
+      'Tomatoes, beans and broth in. Simmer uncovered 35 minutes; it should mound on a spoon, not pour.',
+      'Salt at the end, not the start. Portion into six containers once cool.'
+    ] },
+  { id: 'egg-cups', name: 'Baked Egg & Sausage Cups', cuisine: 'American',
+    tagline: 'A dozen eggs, a muffin tin, breakfast handled for the week.',
+    kcal: 260, protein: 24, carbs: 6, fat: 16, fiber: 1, sugar: 3, satfat: 6, sodium: 540,
+    difficulty: 1, prep: 10, cook: 25, servings: 6, cats: ['prep'],
+    ing: [
+      { n: 'Eggs', q: '12', r: 'none', c: 4.29, p: 4.29 },
+      { n: 'Breakfast sausage', q: '12 oz', r: 'moderate', c: 4.49, p: 4.49, a: 'E250 sodium nitrite, BHA/BHT', note: 'Cured pork with antioxidant preservatives. Fresh bulk sausage or ground pork with fennel and sage avoids both.' },
+      { n: 'Shredded cheddar', q: '4 oz', r: 'low', c: 2, p: 4.99, a: 'Potato starch, natamycin', note: 'Anti-caking coating on bagged shreds.' },
+      { n: 'Spinach', q: '5 oz', r: 'none', c: 2.49, p: 2.49 },
+      { n: 'Bell pepper', q: '1', r: 'none', c: 1.49, p: 1.49 },
+      { n: 'Whole milk', q: '1/4 cup', r: 'none', c: 0.2, p: 4.29 },
+      { n: 'Salt & pepper', q: 'to season', r: 'none', c: 0.15, p: 4.49 }
+    ],
+    steps: [
+      'Brown and crumble the sausage, then wilt the spinach in its fat and squeeze out the water.',
+      'Whisk the eggs with the milk, salt and pepper until fully uniform \u2014 streaky egg bakes rubbery.',
+      'Grease the tin properly, divide the fillings, then pour the egg to three-quarters full.',
+      'Bake at 350\u00b0F for 22 minutes until just set. They keep five days and microwave in 40 seconds.'
+    ] },
+  { id: 'protein-yogurt', name: 'Greek Yogurt Protein Bowl', cuisine: 'Breakfast',
+    tagline: 'Five minutes, 32 g of protein, the highest score in the app. No cooking at all.',
+    kcal: 340, protein: 32, carbs: 38, fat: 6, fiber: 6, sugar: 22, satfat: 2, sodium: 120,
+    difficulty: 1, prep: 5, cook: 0, servings: 2, cats: ['prep', 'trending'],
+    ing: [
+      { n: 'Nonfat Greek yogurt', q: '2 cups', r: 'none', c: 3.49, p: 6.49 },
+      { n: 'Blueberries', q: '1 cup', r: 'none', c: 3.49, p: 3.49 },
+      { n: 'Banana', q: '1', r: 'none', c: 0.35, p: 0.35 },
+      { n: 'Granola', q: '1/2 cup', r: 'low', c: 1.2, p: 5.49, a: '"Natural flavor", sunflower lecithin', note: 'Most boxed granola is 25% sugar. Check the label lists oats before sweetener.' },
+      { n: 'Honey', q: '1 tbsp', r: 'none', c: 0.3, p: 6.99 },
+      { n: 'Peanut butter', q: '1 tbsp', r: 'none', c: 0.2, p: 3.99 },
+      { n: 'Chia seeds', q: '1 tbsp', r: 'none', c: 0.3, p: 6.99 }
+    ],
+    steps: [
+      'Stir the chia into the yogurt and give it five minutes to thicken.',
+      'Warm the peanut butter and honey together for ten seconds so they drizzle instead of clump.',
+      'Layer yogurt, sliced banana, blueberries, then granola last so it stays crisp.'
     ] },
   { id: 'cacio', name: 'Cacio e Pepe', cuisine: 'Roman',
     tagline: 'Three ingredients and nowhere to hide. Learn the emulsion and you own it forever.',
     kcal: 604, protein: 24, carbs: 78, fat: 22, fiber: 3, sugar: 3, satfat: 12, sodium: 690,
     difficulty: 3, prep: 5, cook: 12, servings: 2, cats: ['once'],
     ing: [
-      { n: 'Tonnarelli or spaghetti', q: '7 oz', r: 'none', c: 1.1, p: 2.49 },
+      { n: 'Spaghetti', q: '7 oz', r: 'none', c: 1.1, p: 2.49 },
       { n: 'Pecorino Romano', q: '4 oz', r: 'none', c: 4.5, p: 8.99 },
       { n: 'Black peppercorns', q: '2 tsp', r: 'none', c: 0.25, p: 4.49 },
-      { n: 'Coarse salt', q: 'for the water', r: 'none', c: 0.05, p: 2.49 }
+      { n: 'Kosher salt', q: 'for the water', r: 'none', c: 0.05, p: 2.49 }
     ],
     steps: [
       'Grate the pecorino to a fine powder. Toast the cracked pepper in a dry pan until fragrant.',
       'Cook the pasta in less water than usual so the starch concentrates. Pull it two minutes shy.',
       'Off the heat, whisk the cheese with a few spoons of cooled pasta water into a loose paste \u2014 hot water scrambles it.',
       'Toss pasta, pepper and paste together, adding water in splashes until it turns glossy and coats every strand.'
-    ] },
-  { id: 'adobo', name: 'Chicken Adobo', cuisine: 'Filipino',
-    tagline: 'Vinegar, soy, garlic, bay. Better on day two, and it freezes like a dream.',
-    kcal: 468, protein: 36, carbs: 12, fat: 30, fiber: 1, sugar: 7, satfat: 9, sodium: 1180,
-    difficulty: 2, prep: 15, cook: 45, servings: 4, cats: ['once', 'prep'],
-    ing: [
-      { n: 'Chicken thighs, bone in', q: '2 1/4 lb', r: 'none', c: 7.2, p: 7.2 },
-      { n: 'Cane vinegar', q: '2/3 cup', r: 'none', c: 0.6, p: 3.49 },
-      { n: 'Soy sauce', q: '1/3 cup', r: 'low', c: 0.55, p: 3.99, a: 'E202, caramel color', note: 'Naturally brewed soy lists only soybeans, wheat, salt and water. Chemically hydrolysed versions add preservative and color.' },
-      { n: 'Garlic', q: '1 head', r: 'none', c: 0.79, p: 0.79 },
-      { n: 'Bay leaves', q: '4', r: 'none', c: 0.2, p: 3.49 },
-      { n: 'Black peppercorns', q: '1 tbsp', r: 'none', c: 0.4, p: 4.49 },
-      { n: 'Palm or brown sugar', q: '1 tbsp', r: 'none', c: 0.1, p: 2.99 },
-      { n: 'Steamed rice, to serve', q: '1 1/2 cups', r: 'none', c: 1.05, p: 4.99 }
-    ],
-    steps: [
-      'Marinate the chicken with the soy, smashed garlic, pepper and bay for at least 30 minutes.',
-      'Sear the pieces skin-down in a dry pan until deeply browned. Set aside.',
-      'Add the marinade and the vinegar. Do not stir for the first five minutes \u2014 let the vinegar cook off its edge.',
-      'Return the chicken, simmer covered 30 minutes, then uncovered until the sauce is a sticky glaze. Sugar to finish.'
-    ] },
-  { id: 'broccoli-beans', name: 'Charred Broccoli & White Bean Salad', cuisine: 'Californian',
-    tagline: 'The highest-scoring thing in this app. Thirteen grams of fiber a serving.',
-    kcal: 342, protein: 16, carbs: 34, fat: 16, fiber: 13, sugar: 5, satfat: 2.4, sodium: 380,
-    difficulty: 1, prep: 12, cook: 18, servings: 2, cats: ['prep'],
-    ing: [
-      { n: 'Broccolini', q: '14 oz', r: 'none', c: 3.99, p: 3.99 },
-      { n: 'Cannellini beans', q: '1 can (15 oz)', r: 'none', c: 1.29, p: 1.29 },
-      { n: 'Lemon', q: '1', r: 'none', c: 0.79, p: 0.79 },
-      { n: 'Tahini', q: '2 tbsp', r: 'none', c: 0.7, p: 7.99 },
-      { n: 'Red onion', q: '1/2', r: 'none', c: 0.45, p: 0.9 },
-      { n: 'Toasted almonds', q: '1 1/2 oz', r: 'none', c: 1.1, p: 6.99 },
-      { n: 'Olive oil', q: '3 tbsp', r: 'none', c: 0.8, p: 9.99 },
-      { n: 'Red pepper flakes', q: '1 tsp', r: 'none', c: 0.15, p: 3.99 }
-    ],
-    steps: [
-      'Roast the broccolini at 465\u00b0F with oil and salt for 16 minutes, until the florets are properly blackened at the tips.',
-      'Whisk tahini, lemon juice, a spoon of water and salt into a pourable dressing.',
-      'Warm the drained beans in the same tray for two minutes so they take on the roasting fat.',
-      'Toss everything with the quick-pickled onion, red pepper flakes and almonds. Good hot, better at room temperature.'
-    ] },
-  { id: 'bulgogi', name: 'Beef Bulgogi Lettuce Wraps', cuisine: 'Korean',
-    tagline: 'Pear-marinated beef that cooks in ninety seconds. Built for a hot pan and a crowd.',
-    kcal: 452, protein: 34, carbs: 22, fat: 26, fiber: 3, sugar: 12, satfat: 9, sodium: 880,
-    difficulty: 2, prep: 25, cook: 10, servings: 4, cats: ['trending'],
-    ing: [
-      { n: 'Beef sirloin, sliced thin', q: '1 1/3 lb', r: 'none', c: 13.5, p: 13.5 },
-      { n: 'Asian pear', q: '1', r: 'none', c: 1.99, p: 1.99 },
-      { n: 'Soy sauce', q: '1/4 cup', r: 'low', c: 0.35, p: 3.99, a: 'E202', note: 'Brewed soy only \u2014 check the label lists four ingredients, not eight.' },
-      { n: 'Gochujang', q: '2 tbsp', r: 'moderate', c: 0.7, p: 5.49, a: 'Glucose syrup, E202', note: 'Traditional gochujang is chile, rice and fermented soy. Supermarket tubs lead with syrup.' },
-      { n: 'Sesame oil', q: '1 tbsp', r: 'none', c: 0.35, p: 5.99 },
-      { n: 'Garlic & ginger', q: '4 cloves / 3/4 oz', r: 'none', c: 0.65, p: 1.58 },
-      { n: 'Little gem lettuce', q: '3 heads', r: 'none', c: 3.99, p: 3.99 },
-      { n: 'Scallions', q: '4', r: 'none', c: 0.99, p: 0.99 }
-    ],
-    steps: [
-      'Blitz the pear, garlic, ginger, soy and sesame oil. Marinate the beef 20 minutes \u2014 no longer, or it goes mealy.',
-      'Get a heavy pan smoking hot. Cook the beef in small batches, 45 seconds a side, so it sears instead of steaming.',
-      'Slacken the gochujang with a spoon of water and a little vinegar for the dipping sauce.',
-      'Pile beef into lettuce cups with scallion, sauce and rice on the side.'
-    ] },
-  { id: 'oats', name: 'Tahini & Date Overnight Oats', cuisine: 'Breakfast',
-    tagline: 'Assemble the jars on Sunday night. Breakfast is solved until Friday.',
-    kcal: 386, protein: 14, carbs: 52, fat: 14, fiber: 9, sugar: 18, satfat: 3, sodium: 95,
-    difficulty: 1, prep: 8, cook: 0, servings: 2, cats: ['prep', 'trending'],
-    ing: [
-      { n: 'Rolled oats', q: '1 1/3 cups', r: 'none', c: 0.55, p: 4.49 },
-      { n: 'Milk or oat milk', q: '1 1/4 cups', r: 'low', c: 0.75, p: 4.29, a: 'E471, E170 stabilisers', note: 'Barista-style oat milks add emulsifiers and calcium carbonate. Plain oat milk is usually just oats, water and salt.' },
-      { n: 'Medjool dates', q: '4', r: 'none', c: 1.6, p: 7.99 },
-      { n: 'Tahini', q: '2 tbsp', r: 'none', c: 0.7, p: 7.99 },
-      { n: 'Chia seeds', q: '1 tbsp', r: 'none', c: 0.3, p: 6.99 },
-      { n: 'Cinnamon', q: '1/2 tsp', r: 'none', c: 0.1, p: 3.49 },
-      { n: 'Greek yogurt', q: '1/4 cup', r: 'none', c: 0.6, p: 5.49 }
-    ],
-    steps: [
-      'Stir oats, chia, cinnamon and a pinch of salt together in jars.',
-      'Whisk the milk with the tahini until smooth, then pour over. Fridge overnight.',
-      'Chop the dates and layer them in the morning with a spoon of yogurt so they keep their chew.'
-    ] },
-  { id: 'coq', name: 'Coq au Vin', cuisine: 'French',
-    tagline: 'A weekend project. Braise, reduce, glaze \u2014 the dish that teaches you patience.',
-    kcal: 587, protein: 42, carbs: 14, fat: 34, fiber: 3, sugar: 5, satfat: 12, sodium: 840,
-    difficulty: 5, prep: 30, cook: 105, servings: 4, cats: ['once'],
-    ing: [
-      { n: 'Chicken, jointed', q: '4 lb', r: 'none', c: 11, p: 11 },
-      { n: 'Red burgundy', q: '1 bottle', r: 'none', c: 14, p: 14 },
-      { n: 'Smoked lardons', q: '5 oz', r: 'moderate', c: 4.5, p: 4.5, a: 'E250 sodium nitrite', note: 'Cured pork is the one real additive here. Nitrite-free bacon exists and behaves identically in a braise.' },
-      { n: 'Button mushrooms', q: '9 oz', r: 'none', c: 2.79, p: 2.79 },
-      { n: 'Pearl onions', q: '9 oz', r: 'none', c: 2.49, p: 2.49 },
-      { n: 'All-purpose flour', q: '2 tbsp', r: 'none', c: 0.1, p: 3.49 },
-      { n: 'Butter', q: '3 1/2 tbsp', r: 'none', c: 0.85, p: 4.49 },
-      { n: 'Thyme & bay', q: '1 bundle', r: 'none', c: 1.99, p: 1.99 }
-    ],
-    steps: [
-      'Marinate the chicken in the wine with the herbs overnight. Dry every piece thoroughly before it meets the pan.',
-      'Render the lardons, brown the chicken hard in the fat in batches, then dust with flour and cook it out.',
-      'Deglaze with the marinade, bring to a bare simmer and braise covered at 325\u00b0F for 75 minutes.',
-      'Glaze the onions and mushrooms separately in butter until lacquered. Fold in at the end so they stay distinct.',
-      'Reduce the sauce until it coats a spoon. Rest 20 minutes before serving \u2014 it tightens as it sits.'
-    ] },
-  { id: 'harissa-chickpeas', name: 'Sheet-Pan Harissa Chickpeas', cuisine: 'Levantine',
-    tagline: 'One tray, forty minutes, four portions. The workhorse of meal-prep.',
-    kcal: 398, protein: 16, carbs: 46, fat: 16, fiber: 15, sugar: 10, satfat: 2, sodium: 560,
-    difficulty: 1, prep: 10, cook: 35, servings: 4, cats: ['prep', 'trending'],
-    ing: [
-      { n: 'Chickpeas', q: '2 cans (15 oz)', r: 'none', c: 2.58, p: 2.58 },
-      { n: 'Sweet potatoes', q: '1 1/3 lb', r: 'none', c: 1.99, p: 1.99 },
-      { n: 'Red onions', q: '2', r: 'none', c: 1.8, p: 1.8 },
-      { n: 'Harissa paste', q: '2 tbsp', r: 'moderate', c: 0.9, p: 5.49, a: 'E202 potassium sorbate', note: 'Same flag as the shakshuka: buy the jar with the four-word ingredient list.' },
-      { n: 'Greek yogurt', q: '7 oz', r: 'none', c: 1.7, p: 5.49 },
-      { n: 'Cilantro', q: '1 bunch', r: 'none', c: 1.29, p: 1.29 },
-      { n: 'Olive oil', q: '3 tbsp', r: 'none', c: 0.8, p: 9.99 },
-      { n: 'Lemon', q: '1', r: 'none', c: 0.79, p: 0.79 }
-    ],
-    steps: [
-      'Toss cubed sweet potato and onion wedges with oil, salt and half the harissa. Roast 20 minutes at 425\u00b0F.',
-      'Drain and thoroughly dry the chickpeas, add to the tray with the rest of the harissa, and roast 15 minutes more until crisp at the edges.',
-      'Whip the yogurt with lemon juice and salt.',
-      'Portion into four boxes, yogurt in the lid pot, cilantro over at the last moment.'
-    ] },
-  { id: 'ramen', name: 'Shoyu Ramen from Scratch', cuisine: 'Japanese',
-    tagline: 'Four hours of broth for eleven minutes of eating. Worth it exactly once a season.',
-    kcal: 638, protein: 34, carbs: 74, fat: 24, fiber: 5, sugar: 8, satfat: 8, sodium: 1620,
-    difficulty: 5, prep: 40, cook: 240, servings: 4, cats: ['once'],
-    ing: [
-      { n: 'Chicken wings & backs', q: '3 1/4 lb', r: 'none', c: 6.5, p: 6.5 },
-      { n: 'Pork belly', q: '1 lb', r: 'none', c: 8.99, p: 8.99 },
-      { n: 'Kombu & dried shiitake', q: '3/4 oz / 1/2 oz', r: 'none', c: 3.2, p: 12.98 },
-      { n: 'Fresh ramen noodles', q: '4 portions', r: 'low', c: 4.99, p: 4.99, a: 'E500 kansui salts', note: 'Alkaline salts are what make a ramen noodle springy \u2014 functional, not filler. Instant blocks are the ones to avoid: fried, preserved with TBHQ and salted to 1.8 g sodium each.' },
-      { n: 'Soy sauce & mirin', q: '1/2 cup / 1/4 cup', r: 'low', c: 1.3, p: 8.48, a: 'E202', note: 'Brewed soy and true mirin only; "mirin-style seasoning" is corn syrup.' },
-      { n: 'Eggs', q: '4', r: 'none', c: 1.2, p: 4.29 },
-      { n: 'Scallions & nori', q: 'to finish', r: 'none', c: 1.49, p: 5.48 }
-    ],
-    steps: [
-      'Blanch the bones for 10 minutes, rinse away every trace of scum, then simmer fresh water at a bare tremble for 4 hours.',
-      'Cold-steep the kombu and shiitake separately for the dashi. Never boil the kombu.',
-      'Roll and tie the pork belly, braise it in the soy and mirin tare for 2 hours, then chill and slice thin.',
-      'Marinate soft-boiled eggs in the cooled tare for 6 hours.',
-      'Assemble fast and hot: tare in the bowl, broth, noodles cooked to the second, then pork, egg, scallion, nori.'
-    ] },
-  { id: 'palak-paneer', name: 'Palak Paneer', cuisine: 'North Indian',
-    tagline: 'Blanch the spinach, shock it cold, and the sauce stays a shocking green.',
-    kcal: 424, protein: 22, carbs: 18, fat: 30, fiber: 7, sugar: 6, satfat: 14, sodium: 620,
-    difficulty: 3, prep: 15, cook: 25, servings: 4, cats: ['once', 'prep'],
-    ing: [
-      { n: 'Spinach', q: '1 1/3 lb', r: 'none', c: 3.99, p: 3.99 },
-      { n: 'Paneer', q: '14 oz', r: 'none', c: 5.99, p: 5.99 },
-      { n: 'Onion, tomato, ginger, garlic', q: '1 / 2 / 3/4 oz / 4 cloves', r: 'none', c: 2.4, p: 2.4 },
-      { n: 'Green chiles', q: '2', r: 'none', c: 0.4, p: 1.29 },
-      { n: 'Garam masala & cumin', q: '1 tsp each', r: 'none', c: 0.3, p: 6.98 },
-      { n: 'Heavy cream', q: '1/4 cup', r: 'none', c: 0.9, p: 3.49 },
-      { n: 'Ghee', q: '2 tbsp', r: 'none', c: 0.7, p: 8.99 },
-      { n: 'Kasuri methi', q: '1 tsp', r: 'none', c: 0.2, p: 4.49 }
-    ],
-    steps: [
-      'Blanch the spinach 45 seconds, then straight into iced water. Squeeze dry and blend with the chiles to a coarse pur\u00e9e.',
-      'Fry the cumin in ghee, then the onion until golden, then ginger-garlic, then tomato until the fat splits away.',
-      'Pan-fry the paneer cubes gold on two sides and rest them in warm salted water so they stay soft.',
-      'Fold the pur\u00e9e into the masala over low heat \u2014 never boil it \u2014 then the cream, crushed methi and paneer.'
     ] }
 ];
 
 const STORES = [
-  { name: 'Harvest & Co. Grocer', type: 'Independent grocer', mi: 0.3, price: '$$', hours: '7am–9pm', has: 'Strong on produce, dairy and bulk grains. Best tomatoes within a mile.', keys: ['tomato', 'bell pepper', 'egg', 'onion', 'scallion', 'carrot', 'spinach', 'broccoli', 'potato', 'lettuce', 'cucumber', 'lemon', 'herb', 'parsley', 'cilantro', 'garlic', 'ginger', 'chile', 'date', 'oat', 'yogurt', 'butter', 'milk', 'cream', 'feta', 'paneer'] },
-  { name: 'Meridian Market', type: 'Supermarket', mi: 0.6, price: '$', hours: '6am–11pm', has: 'Cheapest staples, cans and dry goods. Open when nothing else is.', keys: ['lentil', 'chickpea', 'bean', 'rice', 'pasta', 'flour', 'stock', 'vinegar', 'sugar', 'salt', 'oil', 'can', 'noodle', 'bread', 'flatbread'] },
-  { name: 'Sabor Latin Foods', type: 'Specialty', mi: 0.8, price: '$$', hours: '9am–8pm', has: 'Chiles, masa, preserved lemon, harissa without the preservatives.', keys: ['harissa', 'preserved lemon', 'pepper flake', 'almond', 'tahini'] },
-  { name: 'Nishiki Japanese Store', type: 'Specialty', mi: 1.1, price: '$$$', hours: '10am–7pm', has: 'Miso, brewed shoyu, true mirin, kombu, fresh ramen noodles.', keys: ['miso', 'soy', 'mirin', 'nori', 'kombu', 'shiitake', 'sesame', 'gochujang', 'ramen', 'pear', 'dashi'] },
-  { name: 'Green Row Farmers Market', type: 'Saturday market', mi: 1.4, price: '$$', hours: 'Sat 8am–2pm', has: 'Seasonal produce, pasture eggs, whole chickens, honey. Cash preferred.', keys: ['chicken', 'beef', 'pork', 'salmon', 'thigh', 'sirloin', 'belly', 'lardon', 'mushroom', 'sweet potato', 'wine'] }
+  { name: 'Harvest & Co. Grocer', type: 'Independent grocer', mi: 0.3, price: '$$', hours: '7am–9pm', has: 'Produce and dairy done properly — block cheese, real buttermilk, eggs from up the road.', keys: ['egg', 'onion', 'scallion', 'carrot', 'spinach', 'broccoli', 'broccolini', 'potato', 'lettuce', 'romaine', 'green bean', 'bell pepper', 'cucumber', 'lemon', 'banana', 'blueberr', 'parsley', 'thyme', 'garlic', 'ginger', 'cheese', 'cheddar', 'mozzarella', 'parmesan', 'pecorino', 'yogurt', 'buttermilk', 'butter', 'milk', 'cream', 'feta'] },
+  { name: 'Meridian Market', type: 'Supermarket', mi: 0.6, price: '$', hours: '6am–11pm', has: 'Cheapest staples, cans, spices and dry goods. Open when nothing else is.', keys: ['rice', 'pasta', 'spaghetti', 'macaroni', 'flour', 'cornstarch', 'panko', 'breadcrumb', 'bun', 'bread', 'granola', 'honey', 'peanut butter', 'chia', 'oat', 'kidney bean', 'crushed tomato', 'tomato paste', 'marinara', 'broth', 'ketchup', 'mayonnaise', 'mustard', 'worcestershire', 'pickle', 'sugar', 'salt', 'pepper', 'paprika', 'cumin', 'seasoning', 'oil', 'vinegar', 'can'] },
+  { name: 'Sabor Latin Foods', type: 'Specialty', mi: 0.8, price: '$$', hours: '9am–8pm', has: 'Chiles, tortillas, salsa by the tub, limes and cilantro for a dollar.', keys: ['salsa', 'lime', 'cilantro', 'tortilla', 'chili powder', 'black bean', 'corn', 'chile'] },
+  { name: 'Nishiki Japanese Store', type: 'Specialty', mi: 1.1, price: '$$$', hours: '10am–7pm', has: 'Brewed soy, toasted sesame oil, nori and short-grain rice.', keys: ['soy', 'sesame', 'mirin', 'nori', 'kombu', 'dashi'] },
+  { name: 'Green Row Butcher & Market', type: 'Butcher', mi: 1.4, price: '$$', hours: 'Tue–Sat 8am–6pm', has: 'Whole birds, dry-aged steaks, ground beef to order, fresh bulk sausage.', keys: ['beef', 'chicken', 'turkey', 'pork', 'salmon', 'sausage', 'thigh', 'breast', 'ribeye', 'flank', 'chuck', 'roast', 'steak', 'belly'] }
 ];
 
 const DELIVERY = [
@@ -1091,33 +1188,43 @@ function cfg() { return (typeof window !== 'undefined' && window.MISE_CONFIG) ||
    (12 searches per refresh; the free tier allows 50 an hour). Attribution is
    required by Unsplash and travels with every URL. */
 const PHOTOS = {
-  'shakshuka': { url: 'https://images.unsplash.com/photo-1582492710145-d723e0a219f8?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wxMDU3MTQ3fDB8MXxzZWFyY2h8MXx8c2hha3NodWthJTIwZWdncyUyMHNraWxsZXR8ZW58MXwwfHx8MTc4ODcxMDkxNnww&ixlib=rb-4.1.0&q=80&w=1080', thumb: 'https://images.unsplash.com/photo-1582492710145-d723e0a219f8?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wxMDU3MTQ3fDB8MXxzZWFyY2h8MXx8c2hha3NodWthJTIwZWdncyUyMHNraWxsZXR8ZW58MXwwfHx8MTc4ODcxMDkxNnww&ixlib=rb-4.1.0&q=80&w=400', credit: 'Photo by amirali mirhashemian on Unsplash', href: 'https://unsplash.com/@amir_v_ali', alt: 'stainless steel bowl with food' },
-  'salmon-bowl': { url: 'https://images.unsplash.com/photo-1638502182261-7be714a565ce?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wxMDU3MTQ3fDB8MXxzZWFyY2h8MXx8c2FsbW9uJTIwcmljZSUyMGJvd2x8ZW58MXwwfHx8MTc4ODcxMDkxNnww&ixlib=rb-4.1.0&q=80&w=1080', thumb: 'https://images.unsplash.com/photo-1638502182261-7be714a565ce?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wxMDU3MTQ3fDB8MXxzZWFyY2h8MXx8c2FsbW9uJTIwcmljZSUyMGJvd2x8ZW58MXwwfHx8MTc4ODcxMDkxNnww&ixlib=rb-4.1.0&q=80&w=400', credit: 'Photo by Huyen Bui on Unsplash', href: 'https://unsplash.com/@huyenbui30', alt: 'a bowl of food on a wooden board' },
-  'lentil-soup': { url: 'https://images.unsplash.com/photo-1568886875985-ef8a500f8d17?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wxMDU3MTQ3fDB8MXxzZWFyY2h8MXx8bGVudGlsJTIwc291cCUyMGJvd2x8ZW58MXwwfHx8MTc4ODcxMDkxN3ww&ixlib=rb-4.1.0&q=80&w=1080', thumb: 'https://images.unsplash.com/photo-1568886875985-ef8a500f8d17?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wxMDU3MTQ3fDB8MXxzZWFyY2h8MXx8bGVudGlsJTIwc291cCUyMGJvd2x8ZW58MXwwfHx8MTc4ODcxMDkxN3ww&ixlib=rb-4.1.0&q=80&w=400', credit: 'Photo by Louis Hansel on Unsplash', href: 'https://unsplash.com/@louishansel', alt: 'filled bowl' },
-  'cacio': { url: 'https://images.unsplash.com/photo-1588013273468-315fd88ea34c?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wxMDU3MTQ3fDB8MXxzZWFyY2h8MXx8Y2FjaW8lMjBlJTIwcGVwZSUyMHBhc3RhfGVufDF8MHx8fDE3ODg3MTA5MTd8MA&ixlib=rb-4.1.0&q=80&w=1080', thumb: 'https://images.unsplash.com/photo-1588013273468-315fd88ea34c?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wxMDU3MTQ3fDB8MXxzZWFyY2h8MXx8Y2FjaW8lMjBlJTIwcGVwZSUyMHBhc3RhfGVufDF8MHx8fDE3ODg3MTA5MTd8MA&ixlib=rb-4.1.0&q=80&w=400', credit: 'Photo by Zoran Borojevic on Unsplash', href: 'https://unsplash.com/@fresh_studio', alt: 'pasta dish on white ceramic plate' },
-  'adobo': { url: 'https://images.unsplash.com/photo-1609183480237-ccbb2d7c5772?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wxMDU3MTQ3fDB8MXxzZWFyY2h8MXx8Y2hpY2tlbiUyMGFkb2JvfGVufDF8MHx8fDE3ODg3MTA5MTd8MA&ixlib=rb-4.1.0&q=80&w=1080', thumb: 'https://images.unsplash.com/photo-1609183480237-ccbb2d7c5772?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wxMDU3MTQ3fDB8MXxzZWFyY2h8MXx8Y2hpY2tlbiUyMGFkb2JvfGVufDF8MHx8fDE3ODg3MTA5MTd8MA&ixlib=rb-4.1.0&q=80&w=400', credit: 'Photo by Tomoyo S on Unsplash', href: 'https://unsplash.com/@lifetofood', alt: 'cooked food on white ceramic plate' },
-  'broccoli-beans': { url: 'https://images.unsplash.com/photo-1723976525220-a5c4f8a879b6?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wxMDU3MTQ3fDB8MXxzZWFyY2h8MXx8YnJvY2NvbGklMjBmbG9yZXRzJTIwcm9hc3RlZCUyMHRyYXl8ZW58MXwwfHx8MTc4ODcxMDk2OHww&ixlib=rb-4.1.0&q=80&w=1080', thumb: 'https://images.unsplash.com/photo-1723976525220-a5c4f8a879b6?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wxMDU3MTQ3fDB8MXxzZWFyY2h8MXx8YnJvY2NvbGklMjBmbG9yZXRzJTIwcm9hc3RlZCUyMHRyYXl8ZW58MXwwfHx8MTc4ODcxMDk2OHww&ixlib=rb-4.1.0&q=80&w=400', credit: 'Photo by KC Shum on Unsplash', href: 'https://unsplash.com/@kcshum', alt: 'A pile of green broccoli sitting next to each other' },
-  'bulgogi': { url: 'https://images.unsplash.com/photo-1778075188682-c31961bdabcb?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wxMDU3MTQ3fDB8MXxzZWFyY2h8MXx8YnVsZ29naSUyMGJlZWYlMjBrb3JlYW58ZW58MXwwfHx8MTc4ODcxMDkxOHww&ixlib=rb-4.1.0&q=80&w=1080', thumb: 'https://images.unsplash.com/photo-1778075188682-c31961bdabcb?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wxMDU3MTQ3fDB8MXxzZWFyY2h8MXx8YnVsZ29naSUyMGJlZWYlMjBrb3JlYW58ZW58MXwwfHx8MTc4ODcxMDkxOHww&ixlib=rb-4.1.0&q=80&w=400', credit: 'Photo by Harold Castro on Unsplash', href: 'https://unsplash.com/@haroldjp89', alt: 'Gourmet dish with meat, grains, and greens' },
-  'oats': { url: 'https://images.unsplash.com/photo-1541809570-cce873416d94?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wxMDU3MTQ3fDB8MXxzZWFyY2h8MXx8b3Zlcm5pZ2h0JTIwb2F0cyUyMGphcnxlbnwxfDB8fHwxNzg4NzEwOTE4fDA&ixlib=rb-4.1.0&q=80&w=1080', thumb: 'https://images.unsplash.com/photo-1541809570-cce873416d94?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wxMDU3MTQ3fDB8MXxzZWFyY2h8MXx8b3Zlcm5pZ2h0JTIwb2F0cyUyMGphcnxlbnwxfDB8fHwxNzg4NzEwOTE4fDA&ixlib=rb-4.1.0&q=80&w=400', credit: 'Photo by Ella Olsson on Unsplash', href: 'https://unsplash.com/@ellaolsson', alt: 'fruits and cream in clear glass cup' },
-  'coq': { url: 'https://images.unsplash.com/photo-1552723545-1dd9665ace51?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wxMDU3MTQ3fDB8MXxzZWFyY2h8MXx8Y29xJTIwYXUlMjB2aW4lMjBicmFpc2VkJTIwY2hpY2tlbnxlbnwxfDB8fHwxNzg4NzEwOTE5fDA&ixlib=rb-4.1.0&q=80&w=1080', thumb: 'https://images.unsplash.com/photo-1552723545-1dd9665ace51?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wxMDU3MTQ3fDB8MXxzZWFyY2h8MXx8Y29xJTIwYXUlMjB2aW4lMjBicmFpc2VkJTIwY2hpY2tlbnxlbnwxfDB8fHwxNzg4NzEwOTE5fDA&ixlib=rb-4.1.0&q=80&w=400', credit: 'Photo by Ben Lei on Unsplash', href: 'https://unsplash.com/@bleiplays33', alt: 'cooked meat and mushroom' },
-  'harissa-chickpeas': { url: 'https://images.unsplash.com/photo-1568747244129-86a6c6541414?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wxMDU3MTQ3fDB8MXxzZWFyY2h8MXx8cm9hc3RlZCUyMGNoaWNrcGVhcyUyMHNoZWV0JTIwcGFufGVufDF8MHx8fDE3ODg3MTA5MTl8MA&ixlib=rb-4.1.0&q=80&w=1080', thumb: 'https://images.unsplash.com/photo-1568747244129-86a6c6541414?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wxMDU3MTQ3fDB8MXxzZWFyY2h8MXx8cm9hc3RlZCUyMGNoaWNrcGVhcyUyMHNoZWV0JTIwcGFufGVufDF8MHx8fDE3ODg3MTA5MTl8MA&ixlib=rb-4.1.0&q=80&w=400', credit: 'Photo by dimitri.photography on Unsplash', href: 'https://unsplash.com/@dimitriphotography', alt: 'a pan filled with chickpeas and a wooden spoon' },
-  'ramen': { url: 'https://images.unsplash.com/photo-1711435779750-41f53615bac1?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wxMDU3MTQ3fDB8MXxzZWFyY2h8MXx8c2hveXUlMjByYW1lbiUyMGJvd2x8ZW58MXwwfHx8MTc4ODcxMDkxOXww&ixlib=rb-4.1.0&q=80&w=1080', thumb: 'https://images.unsplash.com/photo-1711435779750-41f53615bac1?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wxMDU3MTQ3fDB8MXxzZWFyY2h8MXx8c2hveXUlMjByYW1lbiUyMGJvd2x8ZW58MXwwfHx8MTc4ODcxMDkxOXww&ixlib=rb-4.1.0&q=80&w=400', credit: 'Photo by Poul Hoang on Unsplash', href: 'https://unsplash.com/@poulhoang', alt: 'a bowl of food with chopsticks on a table' },
-  'palak-paneer': { url: 'https://images.unsplash.com/photo-1767114915936-745dd372f1d8?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wxMDU3MTQ3fDB8MXxzZWFyY2h8MXx8c3BpbmFjaCUyMGN1cnJ5JTIwaW5kaWFuJTIwcGFuZWVyfGVufDF8MHx8fDE3ODg3MTA5Njl8MA&ixlib=rb-4.1.0&q=80&w=1080', thumb: 'https://images.unsplash.com/photo-1767114915936-745dd372f1d8?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wxMDU3MTQ3fDB8MXxzZWFyY2h8MXx8c3BpbmFjaCUyMGN1cnJ5JTIwaW5kaWFuJTIwcGFuZWVyfGVufDF8MHx8fDE3ODg3MTA5Njl8MA&ixlib=rb-4.1.0&q=80&w=400', credit: 'Photo by Chetanya Sharma on Unsplash', href: 'https://unsplash.com/@chetanya_designs', alt: 'A delicious indian meal with spinach and flatbread' }
+  'smash-burgers': { url: 'https://images.unsplash.com/photo-1567446991062-e8a1209f70b4?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wxMDU3MTQ3fDB8MXxzZWFyY2h8MXx8c21hc2glMjBidXJnZXIlMjBjaGVlc2VidXJnZXJ8ZW58MXwwfHx8MTc4ODczMDY5OXww&ixlib=rb-4.1.0&q=80&w=1080', thumb: 'https://images.unsplash.com/photo-1567446991062-e8a1209f70b4?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wxMDU3MTQ3fDB8MXxzZWFyY2h8MXx8c21hc2glMjBidXJnZXIlMjBjaGVlc2VidXJnZXJ8ZW58MXwwfHx8MTc4ODczMDY5OXww&ixlib=rb-4.1.0&q=80&w=400', credit: 'Photo by Getúlio Moraes on Unsplash', href: 'https://unsplash.com/@getuliodt', alt: 'double patty burger' },
+  'garlic-salmon': { url: 'https://images.unsplash.com/photo-1539136788836-5699e78bfc75?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wxMDU3MTQ3fDB8MXxzZWFyY2h8MXx8c2FsbW9uJTIwZ3JlZW4lMjBiZWFucyUyMHBsYXRlfGVufDF8MHx8fDE3ODg3MzA2OTl8MA&ixlib=rb-4.1.0&q=80&w=1080', thumb: 'https://images.unsplash.com/photo-1539136788836-5699e78bfc75?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wxMDU3MTQ3fDB8MXxzZWFyY2h8MXx8c2FsbW9uJTIwZ3JlZW4lMjBiZWFucyUyMHBsYXRlfGVufDF8MHx8fDE3ODg3MzA2OTl8MA&ixlib=rb-4.1.0&q=80&w=400', credit: 'Photo by Ella Olsson on Unsplash', href: 'https://unsplash.com/@ellaolsson', alt: 'A salmon fillet with herbs on quinoa beside roasted broccoli and celery on a plate' },
+  'sheetpan-chicken': { url: 'https://images.unsplash.com/photo-1633683789521-99cba8ec5d1b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wxMDU3MTQ3fDB8MXxzZWFyY2h8MXx8c2hlZXQlMjBwYW4lMjByb2FzdGVkJTIwY2hpY2tlbiUyMHZlZ2V0YWJsZXN8ZW58MXwwfHx8MTc4ODczMDcwNHww&ixlib=rb-4.1.0&q=80&w=1080', thumb: 'https://images.unsplash.com/photo-1633683789521-99cba8ec5d1b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wxMDU3MTQ3fDB8MXxzZWFyY2h8MXx8c2hlZXQlMjBwYW4lMjByb2FzdGVkJTIwY2hpY2tlbiUyMHZlZ2V0YWJsZXN8ZW58MXwwfHx8MTc4ODczMDcwNHww&ixlib=rb-4.1.0&q=80&w=400', credit: 'Photo by Kostiantyn Li on Unsplash', href: 'https://unsplash.com/@leekos', alt: 'a grill with chicken and vegetables cooking on it' },
+  'honey-chicken-bowls': { url: 'https://images.unsplash.com/photo-1562036409-9dcc48472e29?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wxMDU3MTQ3fDB8MXxzZWFyY2h8M3x8Y2hpY2tlbiUyMHJpY2UlMjBicm9jY29saSUyMG1lYWwlMjBwcmVwfGVufDF8MHx8fDE3ODg3MzA3MDN8MA&ixlib=rb-4.1.0&q=80&w=1080', thumb: 'https://images.unsplash.com/photo-1562036409-9dcc48472e29?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wxMDU3MTQ3fDB8MXxzZWFyY2h8M3x8Y2hpY2tlbiUyMHJpY2UlMjBicm9jY29saSUyMG1lYWwlMjBwcmVwfGVufDF8MHx8fDE3ODg3MzA3MDN8MA&ixlib=rb-4.1.0&q=80&w=400', credit: 'Photo by Jonathan Borba on Unsplash', href: 'https://unsplash.com/@jonathanborba', alt: 'rice pack' },
+  'beef-broccoli': { url: 'https://images.unsplash.com/photo-1760504526069-ff0f8bf6e4ca?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wxMDU3MTQ3fDB8MXxzZWFyY2h8MXx8YmVlZiUyMGJyb2Njb2xpJTIwc3RpciUyMGZyeXxlbnwxfDB8fHwxNzg4NzMwNzAwfDA&ixlib=rb-4.1.0&q=80&w=1080', thumb: 'https://images.unsplash.com/photo-1760504526069-ff0f8bf6e4ca?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wxMDU3MTQ3fDB8MXxzZWFyY2h8MXx8YmVlZiUyMGJyb2Njb2xpJTIwc3RpciUyMGZyeXxlbnwxfDB8fHwxNzg4NzMwNzAwfDA&ixlib=rb-4.1.0&q=80&w=400', credit: 'Photo by Davis Dai on Unsplash', href: 'https://unsplash.com/@lingo4208', alt: 'Beef and broccoli stir-fry with vegetables on a red plate' },
+  'turkey-tacos': { url: 'https://images.unsplash.com/photo-1599974579688-8dbdd335c77f?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wxMDU3MTQ3fDB8MXxzZWFyY2h8MXx8dGFjb3MlMjBncm91bmQlMjBiZWVmJTIwdG9ydGlsbGF8ZW58MXwwfHx8MTc4ODczMDcxNXww&ixlib=rb-4.1.0&q=80&w=1080', thumb: 'https://images.unsplash.com/photo-1599974579688-8dbdd335c77f?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wxMDU3MTQ3fDB8MXxzZWFyY2h8MXx8dGFjb3MlMjBncm91bmQlMjBiZWVmJTIwdG9ydGlsbGF8ZW58MXwwfHx8MTc4ODczMDcxNXww&ixlib=rb-4.1.0&q=80&w=400', credit: 'Photo by Jeswin Thomas on Unsplash', href: 'https://unsplash.com/@jeswinthomas', alt: 'Three beef tacos topped with chopped white onions and fresh cilantro' },
+  'burrito-bowls': { url: 'https://images.unsplash.com/photo-1762631383815-784c04533802?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wxMDU3MTQ3fDB8MXxzZWFyY2h8Mnx8YnVycml0byUyMGJvd2wlMjBjaGlja2VuJTIwcmljZSUyMGJlYW5zfGVufDF8MHx8fDE3ODg3MzA3MDV8MA&ixlib=rb-4.1.0&q=80&w=1080', thumb: 'https://images.unsplash.com/photo-1762631383815-784c04533802?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wxMDU3MTQ3fDB8MXxzZWFyY2h8Mnx8YnVycml0byUyMGJvd2wlMjBjaGlja2VuJTIwcmljZSUyMGJlYW5zfGVufDF8MHx8fDE3ODg3MzA3MDV8MA&ixlib=rb-4.1.0&q=80&w=400', credit: 'Photo by joe boshra on Unsplash', href: 'https://unsplash.com/@joestudios', alt: 'A wooden bowl filled with chicken, rice, and beans' },
+  'chicken-parm': { url: 'https://images.unsplash.com/photo-1630151317550-db97d275ce2d?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wxMDU3MTQ3fDB8MXxzZWFyY2h8MXx8Y2hpY2tlbiUyMHBhcm1lc2FuJTIwcGFzdGF8ZW58MXwwfHx8MTc4ODczMDcwMXww&ixlib=rb-4.1.0&q=80&w=1080', thumb: 'https://images.unsplash.com/photo-1630151317550-db97d275ce2d?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wxMDU3MTQ3fDB8MXxzZWFyY2h8MXx8Y2hpY2tlbiUyMHBhcm1lc2FuJTIwcGFzdGF8ZW58MXwwfHx8MTc4ODczMDcwMXww&ixlib=rb-4.1.0&q=80&w=400', credit: 'Photo by Konstantinas Ladauskas on Unsplash', href: 'https://unsplash.com/@konstantinas', alt: 'pasta with green leaf on white ceramic plate' },
+  'steak-potatoes': { url: 'https://images.unsplash.com/photo-1708414768203-b8745ab86d86?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wxMDU3MTQ3fDB8MXxzZWFyY2h8NXx8cmliZXllJTIwc3RlYWslMjBjYXN0JTIwaXJvbiUyMHNraWxsZXR8ZW58MXwwfHx8MTc4ODczMDcwMXww&ixlib=rb-4.1.0&q=80&w=1080', thumb: 'https://images.unsplash.com/photo-1708414768203-b8745ab86d86?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wxMDU3MTQ3fDB8MXxzZWFyY2h8NXx8cmliZXllJTIwc3RlYWslMjBjYXN0JTIwaXJvbiUyMHNraWxsZXR8ZW58MXwwfHx8MTc4ODczMDcwMXww&ixlib=rb-4.1.0&q=80&w=400', credit: 'Photo by John Feng on Unsplash', href: 'https://unsplash.com/@johncff', alt: 'a steak is cooking in a skillet on the stove' },
+  'meatloaf': { url: 'https://images.unsplash.com/photo-1705945021699-7374c3fd34cb?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wxMDU3MTQ3fDB8MXxzZWFyY2h8MXx8bWVhdGxvYWYlMjBkaW5uZXIlMjBwbGF0ZXxlbnwxfDB8fHwxNzg4NzMwNzAyfDA&ixlib=rb-4.1.0&q=80&w=1080', thumb: 'https://images.unsplash.com/photo-1705945021699-7374c3fd34cb?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wxMDU3MTQ3fDB8MXxzZWFyY2h8MXx8bWVhdGxvYWYlMjBkaW5uZXIlMjBwbGF0ZXxlbnwxfDB8fHwxNzg4NzMwNzAyfDA&ixlib=rb-4.1.0&q=80&w=400', credit: 'Photo by Martinet Sinan on Unsplash', href: 'https://unsplash.com/@foodfusionfrenzy', alt: 'a loaf of meatloaf on a cutting board with a sprig of' },
+  'pot-roast': { url: 'https://images.unsplash.com/photo-1741560591088-505db91cd105?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wxMDU3MTQ3fDB8MXxzZWFyY2h8OHx8cG90JTIwcm9hc3QlMjBiZWVmJTIwY2Fycm90cyUyMHBvdGF0b2VzfGVufDF8MHx8fDE3ODg3MzA3MDJ8MA&ixlib=rb-4.1.0&q=80&w=1080', thumb: 'https://images.unsplash.com/photo-1741560591088-505db91cd105?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wxMDU3MTQ3fDB8MXxzZWFyY2h8OHx8cG90JTIwcm9hc3QlMjBiZWVmJTIwY2Fycm90cyUyMHBvdGF0b2VzfGVufDF8MHx8fDE3ODg3MzA3MDJ8MA&ixlib=rb-4.1.0&q=80&w=400', credit: 'Photo by Gennady Zakharin on Unsplash', href: 'https://unsplash.com/@gennady107', alt: 'Roasted pork with potatoes and bay leaves' },
+  'fried-chicken': { url: 'https://images.unsplash.com/photo-1742936401708-dd1b132f06db?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wxMDU3MTQ3fDB8MXxzZWFyY2h8Mnx8ZnJpZWQlMjBjaGlja2VuJTIwcGxhdGV8ZW58MXwwfHx8MTc4ODczMDcwM3ww&ixlib=rb-4.1.0&q=80&w=1080', thumb: 'https://images.unsplash.com/photo-1742936401708-dd1b132f06db?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wxMDU3MTQ3fDB8MXxzZWFyY2h8Mnx8ZnJpZWQlMjBjaGlja2VuJTIwcGxhdGV8ZW58MXwwfHx8MTc4ODczMDcwM3ww&ixlib=rb-4.1.0&q=80&w=400', credit: 'Photo by Gennady Zakharin on Unsplash', href: 'https://unsplash.com/@gennady107', alt: 'Delicious, golden fried chicken is piled on a plate' },
+  'mac-chicken': { url: 'https://images.unsplash.com/photo-1543339531-242d0bc29010?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wxMDU3MTQ3fDB8MXxzZWFyY2h8Mnx8YmFrZWQlMjBtYWNhcm9uaSUyMGFuZCUyMGNoZWVzZXxlbnwxfDB8fHwxNzg4NzMwNzAzfDA&ixlib=rb-4.1.0&q=80&w=1080', thumb: 'https://images.unsplash.com/photo-1543339531-242d0bc29010?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wxMDU3MTQ3fDB8MXxzZWFyY2h8Mnx8YmFrZWQlMjBtYWNhcm9uaSUyMGFuZCUyMGNoZWVzZXxlbnwxfDB8fHwxNzg4NzMwNzAzfDA&ixlib=rb-4.1.0&q=80&w=400', credit: 'Photo by Hermes Rivera on Unsplash', href: 'https://unsplash.com/@hermez777', alt: 'yellow pasta on clear glass bowl' },
+  'turkey-chili': { url: 'https://images.unsplash.com/photo-1608500218890-c4f9eace0d93?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wxMDU3MTQ3fDB8MXxzZWFyY2h8M3x8Y2hpbGklMjBjb24lMjBjYXJuZSUyMHN0ZXclMjBib3dsfGVufDF8MHx8fDE3ODg3MzA3MTV8MA&ixlib=rb-4.1.0&q=80&w=1080', thumb: 'https://images.unsplash.com/photo-1608500218890-c4f9eace0d93?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wxMDU3MTQ3fDB8MXxzZWFyY2h8M3x8Y2hpbGklMjBjb24lMjBjYXJuZSUyMHN0ZXclMjBib3dsfGVufDF8MHx8fDE3ODg3MzA3MTV8MA&ixlib=rb-4.1.0&q=80&w=400', credit: 'Photo by Nathan Dumlao on Unsplash', href: 'https://unsplash.com/@nate_dumlao', alt: 'person holding white ceramic bowl with soup' },
+  'egg-cups': { url: 'https://images.unsplash.com/photo-1718307495601-5231e6290d8a?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wxMDU3MTQ3fDB8MXxzZWFyY2h8Mnx8ZWdnJTIwbXVmZmluJTIwY3VwcyUyMGJyZWFrZmFzdHxlbnwxfDB8fHwxNzg4NzMwNzA1fDA&ixlib=rb-4.1.0&q=80&w=1080', thumb: 'https://images.unsplash.com/photo-1718307495601-5231e6290d8a?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wxMDU3MTQ3fDB8MXxzZWFyY2h8Mnx8ZWdnJTIwbXVmZmluJTIwY3VwcyUyMGJyZWFrZmFzdHxlbnwxfDB8fHwxNzg4NzMwNzA1fDA&ixlib=rb-4.1.0&q=80&w=400', credit: 'Photo by MARIOLA GROBELSKA on Unsplash', href: 'https://unsplash.com/@mariolagr', alt: 'a muffin tin filled with cheese next to a bowl of fruit' },
+  'protein-yogurt': { url: 'https://images.unsplash.com/photo-1633104060731-32143505bacc?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wxMDU3MTQ3fDB8MXxzZWFyY2h8MXx8Z3JlZWslMjB5b2d1cnQlMjBiZXJyaWVzJTIwZ3Jhbm9sYSUyMGJvd2x8ZW58MXwwfHx8MTc4ODczMDcwMXww&ixlib=rb-4.1.0&q=80&w=1080', thumb: 'https://images.unsplash.com/photo-1633104060731-32143505bacc?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wxMDU3MTQ3fDB8MXxzZWFyY2h8MXx8Z3JlZWslMjB5b2d1cnQlMjBiZXJyaWVzJTIwZ3Jhbm9sYSUyMGJvd2x8ZW58MXwwfHx8MTc4ODczMDcwMXww&ixlib=rb-4.1.0&q=80&w=400', credit: 'Photo by Shayna Douglas on Unsplash', href: 'https://unsplash.com/@itsmaemedia', alt: 'a bowl of cereal with blueberries and granola' },
+  'cacio': { url: 'https://images.unsplash.com/photo-1588013273468-315fd88ea34c?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wxMDU3MTQ3fDB8MXxzZWFyY2h8MXx8Y2FjaW8lMjBlJTIwcGVwZSUyMHBhc3RhfGVufDF8MHx8fDE3ODg3MTA5MTd8MA&ixlib=rb-4.1.0&q=80&w=1080', thumb: 'https://images.unsplash.com/photo-1588013273468-315fd88ea34c?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wxMDU3MTQ3fDB8MXxzZWFyY2h8MXx8Y2FjaW8lMjBlJTIwcGVwZSUyMHBhc3RhfGVufDF8MHx8fDE3ODg3MTA5MTd8MA&ixlib=rb-4.1.0&q=80&w=400', credit: 'Photo by Zoran Borojevic on Unsplash', href: 'https://unsplash.com/@fresh_studio', alt: 'pasta dish on white ceramic plate' }
 };
 
 const UNSPLASH_Q = {
-  'shakshuka': 'shakshuka eggs skillet',
-  'salmon-bowl': 'salmon rice bowl',
-  'lentil-soup': 'lentil soup bowl',
-  'cacio': 'cacio e pepe pasta',
-  'adobo': 'chicken adobo',
-  'broccoli-beans': 'broccoli florets roasted tray',
-  'bulgogi': 'bulgogi beef korean',
-  'oats': 'overnight oats jar',
-  'coq': 'coq au vin braised chicken',
-  'harissa-chickpeas': 'roasted chickpeas sheet pan',
-  'ramen': 'shoyu ramen bowl',
-  'palak-paneer': 'spinach curry indian paneer'
+  'smash-burgers': 'smash burger cheeseburger',
+  'garlic-salmon': 'salmon green beans plate',
+  'sheetpan-chicken': 'sheet pan roasted chicken vegetables',
+  'honey-chicken-bowls': 'chicken rice broccoli meal prep',
+  'beef-broccoli': 'beef broccoli stir fry',
+  'turkey-tacos': 'tacos ground beef tortilla',
+  'burrito-bowls': 'burrito bowl chicken rice beans',
+  'chicken-parm': 'chicken parmesan pasta',
+  'steak-potatoes': 'ribeye steak cast iron skillet',
+  'meatloaf': 'meatloaf dinner plate',
+  'pot-roast': 'pot roast beef carrots potatoes',
+  'fried-chicken': 'fried chicken plate',
+  'mac-chicken': 'baked macaroni and cheese',
+  'turkey-chili': 'chili con carne stew bowl',
+  'egg-cups': 'egg muffin cups breakfast',
+  'protein-yogurt': 'greek yogurt berries granola bowl',
+  'cacio': 'cacio e pepe pasta'
 };
 
 function clamp(v, a, b) { return Math.max(a, Math.min(b, v)); }
@@ -1165,7 +1272,7 @@ class Component extends DCLogic {
       recipeId: null, dayPickerFor: null, settingsOpen: false,
       apiKey: '', keyDraft: '', model: 'gemini-3.6-flash', target: 2100,
       entries: [], plan: {}, bought: {}, coords: null,
-      photoOverrides: {}, photoBusy: false,
+      photoOverrides: {}, photoBusy: false, seed: 0,
       scanStage: 'idle', scanImg: null, scanResult: null, scanError: null, scanStatus: '',
       aiPicks: null, aiBusy: false, toast: null, swState: 'checking'
     }, stored);
@@ -1186,7 +1293,8 @@ class Component extends DCLogic {
         target: d.target || 2100, entries: Array.isArray(d.entries) ? d.entries : [],
         plan: d.plan && typeof d.plan === 'object' ? d.plan : {},
         bought: d.bought && typeof d.bought === 'object' ? d.bought : {},
-        photoOverrides: d.photoOverrides && typeof d.photoOverrides === 'object' ? d.photoOverrides : {}
+        photoOverrides: d.photoOverrides && typeof d.photoOverrides === 'object' ? d.photoOverrides : {},
+        seed: typeof d.seed === 'number' ? d.seed : 0
       };
     } catch (e) { return {}; }
   }
@@ -1196,7 +1304,7 @@ class Component extends DCLogic {
       localStorage.setItem(LS, JSON.stringify({
         apiKey: s.apiKey, model: s.model, target: s.target,
         entries: s.entries, plan: s.plan, bought: s.bought,
-        photoOverrides: s.photoOverrides
+        photoOverrides: s.photoOverrides, seed: s.seed
       }));
     } catch (e) { /* private mode: session-only */ }
   }
@@ -1268,6 +1376,10 @@ class Component extends DCLogic {
   };
 
   resetPhotos = () => this.set({ photoOverrides: {} }, () => this.flash('Back to the original photography.'));
+
+  /* The feed rotates rather than randomises, so shuffling walks the whole
+     library instead of showing you the same four dishes twice. */
+  shuffleFeed = () => this.set({ seed: this.state.seed + 1 });
   componentDidUpdate(prev) { if (prev.accent !== this.props.accent) this.applyTheme(); }
   applyTheme() {
     const a = this.props.accent;
@@ -1421,15 +1533,15 @@ class Component extends DCLogic {
       required: ['picks']
     };
     const fallback = [
-      { dish: 'Green lentil & preserved lemon soup', why: 'The cheapest serving in your library at $1.75, and 14 g of fiber a bowl. One pot, four days of lunch.' },
-      { dish: 'Sheet-pan harissa chickpeas', why: 'One tray, four portions, $2.96 a serving. Batch it Sunday and lunch is done.' },
-      { dish: 'Miso-butter salmon bowl', why: 'You are light on omega-3 this week and it is on the table in fifteen minutes.' }
+      { dish: 'Sheet-pan chicken thighs, broccoli & potatoes', why: 'Highest-scoring dinner in your library, 40 g of protein, and it is one tray to wash.' },
+      { dish: 'Honey mustard chicken meal-prep bowls', why: '44 g of protein a box at about $3.60 a serving. Make it Sunday and four lunches are done.' },
+      { dish: 'Turkey chili', why: 'Six portions, 10 g of fiber, freezes for a month — the cheapest protein on the list.' }
     ];
     try {
       const out = await this.gemini([{
         text: 'You advise a home cook using a nutrition-scoring cooking app. Recently logged: ' + logged +
               '. Dishes planned this week: ' + planned + '. Daily calorie target: ' + (this.props.calorieTarget || this.state.target) +
-              '. Suggest exactly 3 dishes to cook next. Favour whole ingredients, low additive load, under $5 a serving. ' +
+              '. Suggest exactly 3 dishes to cook next. Favour high-protein, mainstream American home cooking — chicken, beef, salmon, eggs, ground turkey — built from whole ingredients, low additive load, under $6 a serving. Avoid anything niche or hard to shop for in a US supermarket. ' +
               'For each give "dish" (the dish name only) and "why" (one specific sentence tying it to their pattern — no filler).'
       }], schema, 0.8);
       this.setState({ aiPicks: (out.picks || fallback).slice(0, 3), aiBusy: false });
@@ -1604,8 +1716,8 @@ class Component extends DCLogic {
       case 'quick': return r.time <= 30;
       case 'cheap': return r.cost <= 3;
       case 'topgrade': return r.score >= 65;
-      case 'protein': return r.protein >= 25;
-      case 'veg': return ['salmon-bowl', 'adobo', 'bulgogi', 'coq', 'ramen'].indexOf(r.id) < 0;
+      case 'protein': return r.protein >= 35;
+      case 'prep': return r.cats.indexOf('prep') >= 0;
       default: return true;
     }
   }
@@ -1631,13 +1743,17 @@ class Component extends DCLogic {
     }).sort(function (a, b) { return a.name.localeCompare(b.name); });
   }
 
+  /* Longest matching keyword wins, so "peanut butter" beats "butter" and
+     "bell pepper" beats "pepper" regardless of store order. */
   storeFor(name) {
     const n = name.toLowerCase();
-    for (let s = 0; s < STORES.length; s++) {
-      const hit = STORES[s].keys.some(function (k) { return n.indexOf(k) >= 0; });
-      if (hit) return STORES[s].name;
-    }
-    return 'Meridian Market';
+    let best = null, len = 0;
+    STORES.forEach(function (s) {
+      s.keys.forEach(function (k) {
+        if (n.indexOf(k) >= 0 && k.length > len) { len = k.length; best = s.name; }
+      });
+    });
+    return best || 'Meridian Market';
   }
 
   renderVals() {
@@ -1661,17 +1777,27 @@ class Component extends DCLogic {
 
     const filtered = this.recipes.filter(function (r) { return self.matchFilter(r); });
     const doy = Math.floor((Date.now() - new Date(new Date().getFullYear(), 0, 0)) / 86400000);
-    const featured = dress(this.recipes[doy % this.recipes.length]);
+    const rot = function (arr, by) {
+      if (!arr.length) return arr;
+      const k = ((by % arr.length) + arr.length) % arr.length;
+      return arr.slice(k).concat(arr.slice(0, k));
+    };
+    const featured = dress(this.recipes[(doy + s.seed) % this.recipes.length]);
 
-    const trending = filtered.filter(function (r) { return r.cats.indexOf('trending') >= 0; }).map(function (r) { return dress(r); });
-    const classics = filtered.filter(function (r) { return r.cats.indexOf('once') >= 0; }).map(function (r) { return dress(r); });
-    const prepPicks = filtered.filter(function (r) { return r.cats.indexOf('prep') >= 0; })
+    const trendPool = filtered.filter(function (r) { return r.cats.indexOf('trending') >= 0; });
+    const classicPool = filtered.filter(function (r) { return r.cats.indexOf('once') >= 0; });
+    const trending = rot(trendPool, s.seed * 3).slice(0, 4).map(function (r) { return dress(r); });
+    const classics = rot(classicPool, s.seed * 2).slice(0, 4).map(function (r) { return dress(r); });
+    /* "Healthiest meal-prep" has to earn the word: nothing below a C, six max.
+       Meatloaf and mac & cheese are still batch-cookable via the prep filter. */
+    const prepPicks = filtered.filter(function (r) { return r.cats.indexOf('prep') >= 0 && r.score >= 50; })
       .sort(function (a, b) { return b.score - a.score; })
+      .slice(0, 6)
       .map(function (r, i) { return dress(r, { rank: (i + 1) + '.' }); });
 
     const filterDefs = [
-      ['all', 'Everything'], ['quick', 'Under 30 min'], ['cheap', 'Under ' + cur + '3 a serving'],
-      ['topgrade', 'Grade A & B'], ['protein', 'High protein'], ['veg', 'Meat-free']
+      ['all', 'Everything'], ['protein', '35g+ protein'], ['quick', 'Under 30 min'],
+      ['prep', 'Meal-prep'], ['cheap', 'Under ' + cur + '3 a serving'], ['topgrade', 'Grade A & B']
     ];
     const filters = filterDefs.map(function (f) {
       const on = s.filter === f[0];
@@ -1799,7 +1925,10 @@ class Component extends DCLogic {
 
       featured: featured, openFeatured: this.openRecipe(featured.id),
       filters: filters, trending: trending, classics: classics, prepPicks: prepPicks,
-      trendingCount: trending.length + ' of ' + this.recipes.length,
+      trendingCount: trending.length + ' of ' + trendPool.length,
+      classicCount: classics.length + ' of ' + classicPool.length,
+      shuffleFeed: this.shuffleFeed,
+      shuffleLabel: '↻ Shuffle',
       showCardScore: emphasis === 'bold', hideCardScore: emphasis !== 'bold',
       featuredLead: emphasis === 'bold'
         ? featured.score + '/100'
