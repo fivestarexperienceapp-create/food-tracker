@@ -48,7 +48,7 @@ Then open `http://localhost:8080/index.html` (the built app) or `http://localhos
 ## Connect Gemini
 
 1. Get a free key at <https://aistudio.google.com/apikey>.
-2. Put it in `config.js` as `geminiKey`, or open the app, tap the gear in the header and paste it there. Choose **2.5 Flash** (fast, cheap) or **2.5 Pro** (more accurate on messy plates).
+2. Put it in `config.js` as `geminiKey`, or open the app, tap the gear in the header and paste it there. Choose **3.6 Flash** (fast, cheap) or **3.6 Pro** (more accurate on messy plates).
 3. The key is written to `localStorage` under `mise.v1` and sent from the device straight to `generativelanguage.googleapis.com`. It never passes through any server of ours.
 
 The app uses two calls, both with a strict JSON response schema:
@@ -65,6 +65,15 @@ Each of the twelve dishes was matched to an Unsplash photo through the Search AP
 **Settings → Photography → New photos from Unsplash** re-queries the API live using `unsplashKey`, one search per dish (12 of your 50 hourly requests), picking a random result from the top six so you can shuffle until you like the set. Choices persist in local storage; **Reset** returns to the baked-in set. A 403 from Unsplash is reported as a rate-limit message rather than failing silently.
 
 Every photo carries the attribution Unsplash requires ("Photo by … on Unsplash", linked to the photographer), rendered by the image tile itself — that is why dish headers sit at the top of their images, leaving the bottom-left corner clear. Drag any image file onto a tile to override it with your own shot.
+
+## How costs work
+
+Two numbers, because they answer different questions:
+
+- **Food used** — the recipe's share of each ingredient (one tablespoon of harissa, not the jar). This is what divides into cost per serving.
+- **Full shop** — every pack at checkout, for someone starting with an empty pantry. Much higher, and correctly so: the oil, tahini and spices carry over into dozens of later meals.
+
+Measurements and units are US throughout: oz / lb / cups / °F, Calories rather than kcal, miles for store distance, and US ingredient names (scallions, cilantro, heavy cream, all-purpose flour).
 
 ## How the score works
 
@@ -123,6 +132,8 @@ Every card and recipe header is an `<image-slot>` prefilled with its Unsplash ph
 `Mise.dc.html` holds the template and the logic class together.
 
 - **Recipes** — the `RAW` array in the logic class. Each entry needs per-serving nutrition, `cost`, `difficulty` (1–5), `prep`/`cook` minutes, `cats` (`trending`, `once`, `prep`), an `ing` list where every item carries a risk band, and `steps`. Add a matching entry to `PHOTOS` and `UNSPLASH_Q` to give a new dish photography.
-- **Shops** — the `STORES` array. `keys` are the ingredient keywords that route a shopping-list item to that shop; `Directions` links open Google Maps, using your coordinates once you grant location.
+- **Costs** — every ingredient carries `c` (what this recipe's share of it costs) and `p` (the price of the smallest pack you can buy). A recipe's ingredient total is `Σ c`, cost per serving is that divided by `servings`, and the recipe sheet also shows `Σ p` — the from-scratch shop. The week's shopping list totals the *unique* packs, so one jar of harissa is counted once however many dishes use it. Currency is a component prop (`$` by default).
+- **Sources** — the method text is original, so no recipe carries a citation by default. Add `source: { name, url }` to a recipe and the sheet renders "Adapted from <name>" as a link above the action buttons.
+- **Shops** — the `STORES` array. `mi` is the walking distance shown on the card. `keys` are the ingredient keywords that route a shopping-list item to that shop; `Directions` links open Google Maps, using your coordinates once you grant location.
 - **Scoring** — `scoreRecipe()` and the `GRADES` table.
 - **Tweakable settings** — calorie target, score prominence, additive notes, currency and accent colour are exposed as component props.

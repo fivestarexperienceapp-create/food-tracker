@@ -115,7 +115,7 @@
                 <div style="display: flex; align-items: center; gap: 7px; font-family: 'DM Mono', ui-monospace, monospace; font-size: 10px; color: #6E6559;">
                   <span style="flex: none; white-space: nowrap;">{{ r.timeLabel }}</span>
                   <span style="width: 3px; height: 3px; border-radius: 999px; background: #C9BFAF; display: block; flex: none;"></span>
-                  <span style="flex: none; white-space: nowrap;">{{ r.kcal }} kcal</span>
+                  <span style="flex: none; white-space: nowrap;">{{ r.kcal }} cal</span>
                   <span style="width: 3px; height: 3px; border-radius: 999px; background: #C9BFAF; display: block; flex: none;"></span>
                   <span style="flex: none; white-space: nowrap;">{{ r.protein }}g P</span>
                 </div>
@@ -244,7 +244,7 @@
             <button onClick="{{ m.open }}" style="flex: 1; min-width: 0; text-align: left;">
               <div style="font-family: 'DM Mono', ui-monospace, monospace; font-size: 9px; letter-spacing: 0.12em; text-transform: uppercase; color: #8A8075; margin-bottom: 3px;">{{ m.slot }}</div>
               <div style="font-size: 14px; font-weight: 700; letter-spacing: -0.01em; margin-bottom: 4px;">{{ m.name }}</div>
-              <div style="font-family: 'DM Mono', ui-monospace, monospace; font-size: 10px; color: #6E6559;">{{ m.kcal }} kcal · {{ m.costLabel }} · {{ m.timeLabel }}</div>
+              <div style="font-family: 'DM Mono', ui-monospace, monospace; font-size: 10px; color: #6E6559;">{{ m.kcal }} cal · {{ m.costLabel }} · {{ m.timeLabel }}</div>
             </button>
             <button onClick="{{ m.remove }}" aria-label="Remove" style="width: 30px; height: 30px; border-radius: 999px; border: 1px solid #E9E1D5; color: #A79C8C; flex: none; font-size: 15px; line-height: 1;" style-hover="border-color: var(--mise-accent, #C2542F); color: var(--mise-accent, #C2542F);">×</button>
           </div>
@@ -261,13 +261,28 @@
         <h2 style="margin: 0; font-family: 'Instrument Serif', Georgia, serif; font-weight: 400; font-size: 23px;">Shopping list</h2>
         <span style="font-family: 'DM Mono', ui-monospace, monospace; font-size: 9px; letter-spacing: 0.14em; text-transform: uppercase; color: #8A8075;">{{ listMeta }}</span>
       </div>
-      <p style="margin: 0 0 14px; font-size: 12.5px; line-height: 1.5; color: #7A7166;">Rolled up from every dish in the week. Tap to tick off.</p>
+      <p style="margin: 0 0 14px; font-size: 12.5px; line-height: 1.5; color: #7A7166;">Rolled up from every dish in the week — {{ grocery.meals }} dishes, {{ grocery.servings }} servings. Tap to tick off.</p>
+      <div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; margin: 0 0 12px;">
+        <div style="background: #24201B; border-radius: 14px; padding: 12px;">
+          <div style="font-family: 'DM Mono', ui-monospace, monospace; font-size: 9px; letter-spacing: 0.12em; text-transform: uppercase; color: rgba(247,243,236,0.55); margin-bottom: 5px;">Full shop</div>
+          <div style="font-family: 'DM Mono', ui-monospace, monospace; font-size: 17px; color: #F7F3EC;">{{ grocery.packLabel }}</div>
+        </div>
+        <div style="background: #FFFFFF; border: 1px solid #E9E1D5; border-radius: 14px; padding: 12px;">
+          <div style="font-family: 'DM Mono', ui-monospace, monospace; font-size: 9px; letter-spacing: 0.12em; text-transform: uppercase; color: #8A8075; margin-bottom: 5px;">Food used</div>
+          <div style="font-family: 'DM Mono', ui-monospace, monospace; font-size: 17px;">{{ grocery.usedLabel }}</div>
+        </div>
+        <div style="background: #FFFFFF; border: 1px solid #E9E1D5; border-radius: 14px; padding: 12px;">
+          <div style="font-family: 'DM Mono', ui-monospace, monospace; font-size: 9px; letter-spacing: 0.12em; text-transform: uppercase; color: #8A8075; margin-bottom: 5px;">Per serving</div>
+          <div style="font-family: 'DM Mono', ui-monospace, monospace; font-size: 17px;">{{ grocery.perServingLabel }}</div>
+        </div>
+      </div>
       <div style="background: #FFFFFF; border: 1px solid #E9E1D5; border-radius: 16px; overflow: hidden;">
         <sc-for list="{{ shopping }}" as="s" hint-placeholder-count="0">
           <button onClick="{{ s.toggle }}" style="display: flex; align-items: center; gap: 11px; width: 100%; text-align: left; padding: 12px 14px; border-bottom: 1px solid #F1EBE1;">
             <span style="width: 18px; height: 18px; border-radius: 5px; border: 1.5px solid {{ s.boxBorder }}; background: {{ s.boxBg }}; flex: none;"></span>
             <span style="flex: 1; min-width: 0; font-size: 13.5px; font-weight: 600; color: {{ s.fg }}; text-decoration: {{ s.strike }};">{{ s.name }}</span>
-            <span style="font-family: 'DM Mono', ui-monospace, monospace; font-size: 11px; color: #8A8075; flex: none;">{{ s.qty }}</span>
+            <span style="font-family: 'DM Mono', ui-monospace, monospace; font-size: 11px; color: #8A8075; flex: none; white-space: nowrap;">{{ s.qty }}</span>
+            <span style="font-family: 'DM Mono', ui-monospace, monospace; font-size: 11px; flex: none; white-space: nowrap; min-width: 44px; text-align: right; color: {{ s.fg }};">{{ s.packLabel }}</span>
           </button>
         </sc-for>
         <sc-if value="{{ listEmpty }}" hint-placeholder-val="{{ false }}">
@@ -476,7 +491,7 @@
             <span style="width: 30px; height: 30px; border-radius: 9px; display: flex; align-items: center; justify-content: center; font-family: 'DM Mono', ui-monospace, monospace; font-size: 13px; color: #24201B; background: {{ e.color }}; flex: none;">{{ e.grade }}</span>
             <div style="flex: 1; min-width: 0;">
               <div style="font-size: 14px; font-weight: 700; letter-spacing: -0.01em; margin-bottom: 3px;">{{ e.name }}</div>
-              <div style="font-family: 'DM Mono', ui-monospace, monospace; font-size: 10px; color: #6E6559;">{{ e.time }} · {{ e.kcal }} kcal · P{{ e.protein }} C{{ e.carbs }} F{{ e.fat }}</div>
+              <div style="font-family: 'DM Mono', ui-monospace, monospace; font-size: 10px; color: #6E6559;">{{ e.time }} · {{ e.kcal }} cal · P{{ e.protein }} C{{ e.carbs }} F{{ e.fat }}</div>
             </div>
             <button onClick="{{ e.remove }}" aria-label="Delete entry" style="width: 30px; height: 30px; border-radius: 999px; border: 1px solid #E9E1D5; color: #A79C8C; flex: none; font-size: 15px; line-height: 1;" style-hover="border-color: var(--mise-accent, #C2542F); color: var(--mise-accent, #C2542F);">×</button>
           </div>
@@ -508,7 +523,7 @@
           <div style="background: #FFFFFF; border: 1px solid #E9E1D5; border-radius: 16px; padding: 14px;">
             <div style="display: flex; align-items: baseline; gap: 10px; margin-bottom: 6px;">
               <div style="flex: 1; min-width: 0; font-size: 14.5px; font-weight: 700; letter-spacing: -0.01em;">{{ s.name }}</div>
-              <span style="font-family: 'DM Mono', ui-monospace, monospace; font-size: 11px; color: #6E6559; flex: none;">{{ s.km }} km</span>
+              <span style="font-family: 'DM Mono', ui-monospace, monospace; font-size: 11px; color: #6E6559; flex: none;">{{ s.mi }} mi</span>
             </div>
             <div style="font-family: 'DM Mono', ui-monospace, monospace; font-size: 9px; letter-spacing: 0.12em; text-transform: uppercase; color: #8A8075; margin-bottom: 8px;">{{ s.type }} · {{ s.price }} · {{ s.hours }}</div>
             <p style="margin: 0 0 11px; font-size: 12.5px; line-height: 1.5; color: #6E6559;">{{ s.has }}</p>
@@ -613,7 +628,7 @@
             </sc-for>
           </div>
 
-          <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; margin-bottom: 22px;">
+          <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; margin-bottom: 8px;">
             <div style="background: #FFFFFF; border: 1px solid #E9E1D5; border-radius: 14px; padding: 13px;">
               <div style="font-family: 'DM Mono', ui-monospace, monospace; font-size: 9px; letter-spacing: 0.12em; text-transform: uppercase; color: #8A8075; margin-bottom: 6px;">Difficulty</div>
               <div style="display: flex; align-items: center; gap: 4px; margin-bottom: 5px;">
@@ -624,14 +639,29 @@
               <div style="font-size: 12px; color: #6E6559;">{{ recipe.diffLabel }}</div>
             </div>
             <div style="background: #FFFFFF; border: 1px solid #E9E1D5; border-radius: 14px; padding: 13px;">
-              <div style="font-family: 'DM Mono', ui-monospace, monospace; font-size: 9px; letter-spacing: 0.12em; text-transform: uppercase; color: #8A8075; margin-bottom: 6px;">Time &amp; cost</div>
+              <div style="font-family: 'DM Mono', ui-monospace, monospace; font-size: 9px; letter-spacing: 0.12em; text-transform: uppercase; color: #8A8075; margin-bottom: 6px;">Time</div>
               <div style="font-family: 'DM Mono', ui-monospace, monospace; font-size: 15px; margin-bottom: 3px;">{{ recipe.timeLabel }}</div>
-              <div style="font-size: 12px; color: #6E6559;">{{ recipe.costLabel }} per serving</div>
+              <div style="font-size: 12px; color: #6E6559;">{{ recipe.prep }}m prep · {{ recipe.cook }}m cook</div>
+            </div>
+          </div>
+
+          <div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; margin: 0 0 22px;">
+            <div style="background: #24201B; border-radius: 14px; padding: 12px;">
+              <div style="font-family: 'DM Mono', ui-monospace, monospace; font-size: 9px; letter-spacing: 0.12em; text-transform: uppercase; color: rgba(247,243,236,0.55); margin-bottom: 5px;">Food used</div>
+              <div style="font-family: 'DM Mono', ui-monospace, monospace; font-size: 17px; color: #F7F3EC;">{{ recipe.usedLabel }}</div>
+            </div>
+            <div style="background: #FFFFFF; border: 1px solid #E9E1D5; border-radius: 14px; padding: 12px;">
+              <div style="font-family: 'DM Mono', ui-monospace, monospace; font-size: 9px; letter-spacing: 0.12em; text-transform: uppercase; color: #8A8075; margin-bottom: 5px;">Servings</div>
+              <div style="font-family: 'DM Mono', ui-monospace, monospace; font-size: 17px;">{{ recipe.servings }}</div>
+            </div>
+            <div style="background: #FFFFFF; border: 1px solid #E9E1D5; border-radius: 14px; padding: 12px;">
+              <div style="font-family: 'DM Mono', ui-monospace, monospace; font-size: 9px; letter-spacing: 0.12em; text-transform: uppercase; color: #8A8075; margin-bottom: 5px;">Per serving</div>
+              <div style="font-family: 'DM Mono', ui-monospace, monospace; font-size: 17px;">{{ recipe.costLabel }}</div>
             </div>
           </div>
 
           <h3 style="margin: 0 0 4px; font-family: 'Instrument Serif', Georgia, serif; font-weight: 400; font-size: 21px;">Ingredients</h3>
-          <p style="margin: 0 0 12px; font-size: 12px; line-height: 1.5; color: #8A8075;">Dots flag processed components and their additives — the whole-food items are unmarked.</p>
+          <p style="margin: 0 0 12px; font-size: 12px; line-height: 1.5; color: #8A8075;">Prices are what this recipe's share of each ingredient costs. Buying every item from scratch — whole jars, bottles and bunches — runs <strong style="color: #24201B; font-weight: 700;">{{ recipe.packLabel }}</strong>, and the pantry items then cover many more meals. Dots flag processed components and their additives.</p>
           <div style="background: #FFFFFF; border: 1px solid #E9E1D5; border-radius: 16px; overflow: hidden; margin-bottom: 22px;">
             <sc-for list="{{ recipe.ing }}" as="i" hint-placeholder-count="6">
               <div style="display: flex; align-items: flex-start; gap: 10px; padding: 12px 14px; border-bottom: 1px solid #F1EBE1;">
@@ -639,7 +669,8 @@
                 <div style="flex: 1; min-width: 0;">
                   <div style="display: flex; gap: 8px; align-items: baseline;">
                     <span style="flex: 1; min-width: 0; font-size: 13.5px; font-weight: 600;">{{ i.n }}</span>
-                    <span style="font-family: 'DM Mono', ui-monospace, monospace; font-size: 11px; color: #8A8075; flex: none;">{{ i.q }}</span>
+                    <span style="font-family: 'DM Mono', ui-monospace, monospace; font-size: 11px; color: #8A8075; flex: none; white-space: nowrap;">{{ i.q }}</span>
+                    <span style="font-family: 'DM Mono', ui-monospace, monospace; font-size: 11px; flex: none; white-space: nowrap; min-width: 42px; text-align: right;">{{ i.cLabel }}</span>
                   </div>
                   <sc-if value="{{ i.note }}" hint-placeholder-val="{{ false }}">
                     <div style="margin-top: 5px; padding: 8px 9px; border-radius: 9px; background: #F7F3EC;">
@@ -660,6 +691,13 @@
                 <p style="margin: 0; font-size: 13.5px; line-height: 1.6;">{{ s.text }}</p>
               </div>
             </sc-for>
+          </div>
+
+          <div style="border-top: 1px solid #E4DCD0; padding-top: 14px; margin-bottom: 22px;">
+            <sc-if value="{{ recipe.hasSource }}" hint-placeholder-val="{{ false }}">
+              <p style="margin: 0 0 8px; font-size: 12.5px; line-height: 1.5; color: #6E6559;">Adapted from <a href="{{ recipe.sourceUrl }}" target="_blank" rel="noopener">{{ recipe.sourceName }}</a>.</p>
+            </sc-if>
+            <p style="margin: 0; font-size: 12px; line-height: 1.55; color: #8A8075;">Method written for Mise, not reprinted from a site \u2014 so there is nothing to credit. <a href="{{ recipe.refUrl }}" target="_blank" rel="noopener">Compare published versions \u2192</a></p>
           </div>
 
           <div style="display: flex; flex-direction: column; gap: 8px;">
@@ -765,10 +803,10 @@
 
 </x-dc>
 <script type="text/x-dc" data-dc-script data-props="{
-  &quot;calorieTarget&quot;: { &quot;editor&quot;: &quot;int&quot;, &quot;default&quot;: 2100, &quot;min&quot;: 1200, &quot;max&quot;: 4500, &quot;step&quot;: 50, &quot;unit&quot;: &quot;kcal&quot;, &quot;tsType&quot;: &quot;number&quot;, &quot;section&quot;: &quot;Nutrition&quot; },
+  &quot;calorieTarget&quot;: { &quot;editor&quot;: &quot;int&quot;, &quot;default&quot;: 2100, &quot;min&quot;: 1200, &quot;max&quot;: 4500, &quot;step&quot;: 50, &quot;unit&quot;: &quot;cal&quot;, &quot;tsType&quot;: &quot;number&quot;, &quot;section&quot;: &quot;Nutrition&quot; },
   &quot;scoreEmphasis&quot;: { &quot;editor&quot;: &quot;enum&quot;, &quot;options&quot;: [&quot;subtle&quot;, &quot;bold&quot;], &quot;default&quot;: &quot;subtle&quot;, &quot;tsType&quot;: &quot;string&quot;, &quot;section&quot;: &quot;Nutrition&quot; },
   &quot;showAdditives&quot;: { &quot;editor&quot;: &quot;boolean&quot;, &quot;default&quot;: true, &quot;tsType&quot;: &quot;boolean&quot;, &quot;section&quot;: &quot;Nutrition&quot; },
-  &quot;currency&quot;: { &quot;editor&quot;: &quot;enum&quot;, &quot;options&quot;: [&quot;£&quot;, &quot;$&quot;, &quot;€&quot;], &quot;default&quot;: &quot;£&quot;, &quot;tsType&quot;: &quot;string&quot;, &quot;section&quot;: &quot;Cost&quot; },
+  &quot;currency&quot;: { &quot;editor&quot;: &quot;enum&quot;, &quot;options&quot;: [&quot;$&quot;, &quot;£&quot;, &quot;€&quot;], &quot;default&quot;: &quot;$&quot;, &quot;tsType&quot;: &quot;string&quot;, &quot;section&quot;: &quot;Cost&quot; },
   &quot;accent&quot;: { &quot;editor&quot;: &quot;color&quot;, &quot;default&quot;: &quot;#C2542F&quot;, &quot;options&quot;: [&quot;#C2542F&quot;, &quot;#4A7A4E&quot;, &quot;#3E5C7E&quot;, &quot;#8A5A9E&quot;], &quot;tsType&quot;: &quot;string&quot;, &quot;section&quot;: &quot;Look&quot; }
 }">
 const RISK = {
@@ -792,248 +830,247 @@ const RAW = [
   { id: 'shakshuka', name: 'Shakshuka with Whipped Feta', cuisine: 'Levantine',
     tagline: 'Eggs poached into a smoky pepper stew, cooled by salty whipped feta and torn herbs.',
     kcal: 412, protein: 22, carbs: 24, fat: 26, fiber: 6, sugar: 9, satfat: 9, sodium: 780,
-    cost: 2.4, difficulty: 2, prep: 10, cook: 25, servings: 2, cats: ['trending', 'once'],
+    difficulty: 2, prep: 10, cook: 25, servings: 2, cats: ['trending', 'once'],
     ing: [
-      { n: 'Ripe tomatoes', q: '600 g', r: 'none' },
-      { n: 'Red bell peppers', q: '2', r: 'none' },
-      { n: 'Eggs', q: '4', r: 'none' },
-      { n: 'Feta', q: '120 g', r: 'none' },
-      { n: 'Harissa paste', q: '1 tbsp', r: 'moderate', a: 'E202 potassium sorbate', note: 'Most jarred harissa is preserved. A paste listing only chilli, oil, garlic and salt lifts this dish a full grade.' },
-      { n: 'Cumin seeds', q: '1 tsp', r: 'none' },
-      { n: 'Olive oil', q: '2 tbsp', r: 'none' },
-      { n: 'Flatbread, to serve', q: '2', r: 'low', a: 'E471 emulsifier', note: 'Long-life flatbread carries emulsifiers and dough conditioners. Bakery or homemade skips both.' }
+      { n: 'Ripe tomatoes', q: '1 1/4 lb', r: 'none', c: 2.6, p: 2.6 },
+      { n: 'Red bell peppers', q: '2', r: 'none', c: 1.8, p: 1.8 },
+      { n: 'Eggs', q: '4', r: 'none', c: 1.2, p: 4.29 },
+      { n: 'Feta', q: '4 oz', r: 'none', c: 2, p: 4.99 },
+      { n: 'Harissa paste', q: '1 tbsp', r: 'moderate', c: 0.45, p: 5.49, a: 'E202 potassium sorbate', note: 'Most jarred harissa is preserved. A paste listing only chile, oil, garlic and salt lifts this dish a full grade.' },
+      { n: 'Cumin seeds', q: '1 tsp', r: 'none', c: 0.15, p: 3.99 },
+      { n: 'Olive oil', q: '2 tbsp', r: 'none', c: 0.55, p: 9.99 },
+      { n: 'Flatbread, to serve', q: '2', r: 'low', c: 1.4, p: 3.49, a: 'E471 emulsifier', note: 'Long-life flatbread carries emulsifiers and dough conditioners. Bakery or homemade skips both.' }
     ],
     steps: [
       'Toast the cumin in olive oil until it crackles, then soften the sliced peppers with a good pinch of salt for 8 minutes.',
-      'Add the harissa, cook it out for a minute, then the chopped tomatoes. Simmer 12–15 minutes until it holds a spoon-drawn trench.',
+      'Add the harissa, cook it out for a minute, then the chopped tomatoes. Simmer 12\u201315 minutes until it holds a spoon-drawn trench.',
       'Whip the feta with a splash of the pepper oil until spreadable. Keep it cold.',
-      'Make four wells, crack in the eggs, cover and cook 5–6 minutes for set whites and loose yolks.',
+      'Make four wells, crack in the eggs, cover and cook 5\u20136 minutes for set whites and loose yolks.',
       'Spoon the feta over in clouds, scatter herbs, and eat straight from the pan with the flatbread.'
     ] },
   { id: 'salmon-bowl', name: 'Miso-Butter Salmon Rice Bowl', cuisine: 'Japanese',
-    tagline: 'Fifteen minutes, one grill tray: glazed salmon over vinegared rice with cucumber.',
+    tagline: 'Fifteen minutes, one broiler tray: glazed salmon over vinegared rice with cucumber.',
     kcal: 546, protein: 38, carbs: 48, fat: 22, fiber: 5, sugar: 6, satfat: 7, sodium: 690,
-    cost: 4.8, difficulty: 2, prep: 10, cook: 15, servings: 2, cats: ['trending'],
+    difficulty: 2, prep: 10, cook: 15, servings: 2, cats: ['trending'],
     ing: [
-      { n: 'Salmon fillets', q: '2 × 150 g', r: 'none' },
-      { n: 'Short-grain rice', q: '180 g', r: 'none' },
-      { n: 'White miso', q: '2 tbsp', r: 'none' },
-      { n: 'Unsalted butter', q: '20 g', r: 'none' },
-      { n: 'Rice vinegar', q: '1 tbsp', r: 'none' },
-      { n: 'Cucumber', q: '1', r: 'none' },
-      { n: 'Nori sheets', q: '2', r: 'none' },
-      { n: 'Bottled teriyaki glaze (optional)', q: '1 tbsp', r: 'moderate', a: 'Glucose-fructose syrup, E415', note: 'Skip it — miso, butter and a little honey give you the same lacquer without the syrup.' }
+      { n: 'Salmon fillets', q: '2 \u00d7 5 oz', r: 'none', c: 11, p: 11 },
+      { n: 'Short-grain rice', q: '1 cup', r: 'none', c: 0.7, p: 4.99 },
+      { n: 'White miso', q: '2 tbsp', r: 'none', c: 0.6, p: 5.99 },
+      { n: 'Unsalted butter', q: '1 1/2 tbsp', r: 'none', c: 0.35, p: 4.49 },
+      { n: 'Rice vinegar', q: '1 tbsp', r: 'none', c: 0.15, p: 3.29 },
+      { n: 'Cucumber', q: '1', r: 'none', c: 0.99, p: 0.99 },
+      { n: 'Nori sheets', q: '2', r: 'none', c: 0.5, p: 4.49 },
+      { n: 'Bottled teriyaki glaze (optional)', q: '1 tbsp', r: 'moderate', c: 0.3, p: 3.99, a: 'Glucose-fructose syrup, E415', note: 'Skip it \u2014 miso, butter and a little honey give you the same lacquer without the syrup.' }
     ],
     steps: [
       'Rinse the rice until the water runs clear, then cook it. Fold through the vinegar while warm and cover.',
       'Mash the miso into soft butter. Smear it thickly over the salmon.',
-      'Grill 8–10 minutes on high, close to the element, until the glaze blisters dark at the edges.',
+      'Broil 8\u201310 minutes on high, close to the element, until the glaze blisters dark at the edges.',
       'Build the bowls: rice, salmon broken into big flakes, shaved cucumber, torn nori.'
     ] },
   { id: 'lentil-soup', name: 'Green Lentil & Preserved Lemon Soup', cuisine: 'North African',
-    tagline: 'A pound of lentils, one pot, four days of lunch. Preserved lemon keeps it bright.',
+    tagline: 'A bag of lentils, one pot, four days of lunch. Preserved lemon keeps it bright.',
     kcal: 318, protein: 18, carbs: 44, fat: 7, fiber: 14, sugar: 6, satfat: 1.2, sodium: 520,
-    cost: 1.1, difficulty: 1, prep: 10, cook: 35, servings: 4, cats: ['prep'],
+    difficulty: 1, prep: 10, cook: 35, servings: 4, cats: ['prep'],
     ing: [
-      { n: 'Green lentils', q: '300 g', r: 'none' },
-      { n: 'Onions', q: '2', r: 'none' },
-      { n: 'Carrots', q: '3', r: 'none' },
-      { n: 'Preserved lemon', q: '1', r: 'none' },
-      { n: 'Ground cumin & coriander', q: '2 tsp each', r: 'none' },
-      { n: 'Vegetable stock cube', q: '1', r: 'low', a: 'E621 monosodium glutamate', note: 'Most cubes are salt plus MSG. A yeast-extract-only paste or homemade stock drops the sodium by a third.' },
-      { n: 'Flat-leaf parsley', q: '1 bunch', r: 'none' },
-      { n: 'Olive oil', q: '2 tbsp', r: 'none' }
+      { n: 'Green lentils', q: '1 1/2 cups', r: 'none', c: 1.6, p: 2.99 },
+      { n: 'Onions', q: '2', r: 'none', c: 1, p: 1 },
+      { n: 'Carrots', q: '3', r: 'none', c: 0.75, p: 1.99 },
+      { n: 'Preserved lemon', q: '1', r: 'none', c: 1.1, p: 6.99 },
+      { n: 'Ground cumin & coriander', q: '2 tsp each', r: 'none', c: 0.4, p: 6.98 },
+      { n: 'Vegetable stock cube', q: '1', r: 'low', c: 0.3, p: 2.99, a: 'E621 monosodium glutamate', note: 'Most cubes are salt plus MSG. A yeast-extract-only paste or homemade stock drops the sodium by a third.' },
+      { n: 'Flat-leaf parsley', q: '1 bunch', r: 'none', c: 1.29, p: 1.29 },
+      { n: 'Olive oil', q: '2 tbsp', r: 'none', c: 0.55, p: 9.99 }
     ],
     steps: [
-      'Sweat the diced onion and carrot in oil for 10 minutes without colouring. Add the spices and cook 60 seconds.',
-      'Add the lentils and 1.4 litres of stock. Simmer 30 minutes until the lentils collapse at the edges.',
+      'Sweat the diced onion and carrot in oil for 10 minutes without coloring. Add the spices and cook 60 seconds.',
+      'Add the lentils and 6 cups of stock. Simmer 30 minutes until the lentils collapse at the edges.',
       'Blend a third of the soup and stir it back for body. Chop the preserved lemon fine and fold it through off the heat.',
       'Cool fast, portion into four jars, fridge for four days or freeze for three months.'
     ] },
   { id: 'cacio', name: 'Cacio e Pepe', cuisine: 'Roman',
     tagline: 'Three ingredients and nowhere to hide. Learn the emulsion and you own it forever.',
     kcal: 604, protein: 24, carbs: 78, fat: 22, fiber: 3, sugar: 3, satfat: 12, sodium: 690,
-    cost: 1.6, difficulty: 3, prep: 5, cook: 12, servings: 2, cats: ['once'],
+    difficulty: 3, prep: 5, cook: 12, servings: 2, cats: ['once'],
     ing: [
-      { n: 'Tonnarelli or spaghetti', q: '200 g', r: 'none' },
-      { n: 'Pecorino Romano', q: '120 g', r: 'none' },
-      { n: 'Black peppercorns', q: '2 tsp', r: 'none' },
-      { n: 'Coarse salt', q: 'for the water', r: 'none' }
+      { n: 'Tonnarelli or spaghetti', q: '7 oz', r: 'none', c: 1.1, p: 2.49 },
+      { n: 'Pecorino Romano', q: '4 oz', r: 'none', c: 4.5, p: 8.99 },
+      { n: 'Black peppercorns', q: '2 tsp', r: 'none', c: 0.25, p: 4.49 },
+      { n: 'Coarse salt', q: 'for the water', r: 'none', c: 0.05, p: 2.49 }
     ],
     steps: [
       'Grate the pecorino to a fine powder. Toast the cracked pepper in a dry pan until fragrant.',
       'Cook the pasta in less water than usual so the starch concentrates. Pull it two minutes shy.',
-      'Off the heat, whisk the cheese with a few spoons of cooled pasta water into a loose paste — hot water scrambles it.',
+      'Off the heat, whisk the cheese with a few spoons of cooled pasta water into a loose paste \u2014 hot water scrambles it.',
       'Toss pasta, pepper and paste together, adding water in splashes until it turns glossy and coats every strand.'
     ] },
   { id: 'adobo', name: 'Chicken Adobo', cuisine: 'Filipino',
     tagline: 'Vinegar, soy, garlic, bay. Better on day two, and it freezes like a dream.',
     kcal: 468, protein: 36, carbs: 12, fat: 30, fiber: 1, sugar: 7, satfat: 9, sodium: 1180,
-    cost: 2.9, difficulty: 2, prep: 15, cook: 45, servings: 4, cats: ['once', 'prep'],
+    difficulty: 2, prep: 15, cook: 45, servings: 4, cats: ['once', 'prep'],
     ing: [
-      { n: 'Chicken thighs, bone in', q: '1 kg', r: 'none' },
-      { n: 'Cane vinegar', q: '150 ml', r: 'none' },
-      { n: 'Soy sauce', q: '100 ml', r: 'low', a: 'E202, caramel colour', note: 'Naturally brewed soy lists only soybeans, wheat, salt and water. Chemically hydrolysed versions add preservative and colour.' },
-      { n: 'Garlic', q: '1 head', r: 'none' },
-      { n: 'Bay leaves', q: '4', r: 'none' },
-      { n: 'Black peppercorns', q: '1 tbsp', r: 'none' },
-      { n: 'Palm or brown sugar', q: '1 tbsp', r: 'none' },
-      { n: 'Steamed rice, to serve', q: '300 g', r: 'none' }
+      { n: 'Chicken thighs, bone in', q: '2 1/4 lb', r: 'none', c: 7.2, p: 7.2 },
+      { n: 'Cane vinegar', q: '2/3 cup', r: 'none', c: 0.6, p: 3.49 },
+      { n: 'Soy sauce', q: '1/3 cup', r: 'low', c: 0.55, p: 3.99, a: 'E202, caramel color', note: 'Naturally brewed soy lists only soybeans, wheat, salt and water. Chemically hydrolysed versions add preservative and color.' },
+      { n: 'Garlic', q: '1 head', r: 'none', c: 0.79, p: 0.79 },
+      { n: 'Bay leaves', q: '4', r: 'none', c: 0.2, p: 3.49 },
+      { n: 'Black peppercorns', q: '1 tbsp', r: 'none', c: 0.4, p: 4.49 },
+      { n: 'Palm or brown sugar', q: '1 tbsp', r: 'none', c: 0.1, p: 2.99 },
+      { n: 'Steamed rice, to serve', q: '1 1/2 cups', r: 'none', c: 1.05, p: 4.99 }
     ],
     steps: [
       'Marinate the chicken with the soy, smashed garlic, pepper and bay for at least 30 minutes.',
       'Sear the pieces skin-down in a dry pan until deeply browned. Set aside.',
-      'Add the marinade and the vinegar. Do not stir for the first five minutes — let the vinegar cook off its edge.',
+      'Add the marinade and the vinegar. Do not stir for the first five minutes \u2014 let the vinegar cook off its edge.',
       'Return the chicken, simmer covered 30 minutes, then uncovered until the sauce is a sticky glaze. Sugar to finish.'
     ] },
   { id: 'broccoli-beans', name: 'Charred Broccoli & White Bean Salad', cuisine: 'Californian',
-    tagline: 'The highest-scoring thing in this app. Fifteen grams of fibre for under two pounds.',
+    tagline: 'The highest-scoring thing in this app. Thirteen grams of fiber a serving.',
     kcal: 342, protein: 16, carbs: 34, fat: 16, fiber: 13, sugar: 5, satfat: 2.4, sodium: 380,
-    cost: 1.8, difficulty: 1, prep: 12, cook: 18, servings: 2, cats: ['prep'],
+    difficulty: 1, prep: 12, cook: 18, servings: 2, cats: ['prep'],
     ing: [
-      { n: 'Tenderstem broccoli', q: '400 g', r: 'none' },
-      { n: 'Cannellini beans', q: '1 tin (400 g)', r: 'none' },
-      { n: 'Lemon', q: '1', r: 'none' },
-      { n: 'Tahini', q: '2 tbsp', r: 'none' },
-      { n: 'Red onion', q: '1/2', r: 'none' },
-      { n: 'Toasted almonds', q: '40 g', r: 'none' },
-      { n: 'Olive oil', q: '3 tbsp', r: 'none' },
-      { n: 'Chilli flakes', q: '1 tsp', r: 'none' }
+      { n: 'Broccolini', q: '14 oz', r: 'none', c: 3.99, p: 3.99 },
+      { n: 'Cannellini beans', q: '1 can (15 oz)', r: 'none', c: 1.29, p: 1.29 },
+      { n: 'Lemon', q: '1', r: 'none', c: 0.79, p: 0.79 },
+      { n: 'Tahini', q: '2 tbsp', r: 'none', c: 0.7, p: 7.99 },
+      { n: 'Red onion', q: '1/2', r: 'none', c: 0.45, p: 0.9 },
+      { n: 'Toasted almonds', q: '1 1/2 oz', r: 'none', c: 1.1, p: 6.99 },
+      { n: 'Olive oil', q: '3 tbsp', r: 'none', c: 0.8, p: 9.99 },
+      { n: 'Red pepper flakes', q: '1 tsp', r: 'none', c: 0.15, p: 3.99 }
     ],
     steps: [
-      'Roast the broccoli at 240°C with oil and salt for 16 minutes, until the florets are properly blackened at the tips.',
+      'Roast the broccolini at 465\u00b0F with oil and salt for 16 minutes, until the florets are properly blackened at the tips.',
       'Whisk tahini, lemon juice, a spoon of water and salt into a pourable dressing.',
       'Warm the drained beans in the same tray for two minutes so they take on the roasting fat.',
-      'Toss everything with the quick-pickled onion, chilli and almonds. Good hot, better at room temperature.'
+      'Toss everything with the quick-pickled onion, red pepper flakes and almonds. Good hot, better at room temperature.'
     ] },
   { id: 'bulgogi', name: 'Beef Bulgogi Lettuce Wraps', cuisine: 'Korean',
     tagline: 'Pear-marinated beef that cooks in ninety seconds. Built for a hot pan and a crowd.',
     kcal: 452, protein: 34, carbs: 22, fat: 26, fiber: 3, sugar: 12, satfat: 9, sodium: 880,
-    cost: 4.2, difficulty: 2, prep: 25, cook: 10, servings: 4, cats: ['trending'],
+    difficulty: 2, prep: 25, cook: 10, servings: 4, cats: ['trending'],
     ing: [
-      { n: 'Beef sirloin, sliced thin', q: '600 g', r: 'none' },
-      { n: 'Asian pear', q: '1', r: 'none' },
-      { n: 'Soy sauce', q: '60 ml', r: 'low', a: 'E202', note: 'Brewed soy only — check the label lists four ingredients, not eight.' },
-      { n: 'Gochujang', q: '2 tbsp', r: 'moderate', a: 'Glucose syrup, E202', note: 'Traditional gochujang is chilli, rice and fermented soy. Supermarket tubs lead with syrup.' },
-      { n: 'Sesame oil', q: '1 tbsp', r: 'none' },
-      { n: 'Garlic & ginger', q: '4 cloves / 20 g', r: 'none' },
-      { n: 'Little gem lettuce', q: '3 heads', r: 'none' },
-      { n: 'Spring onions', q: '4', r: 'none' }
+      { n: 'Beef sirloin, sliced thin', q: '1 1/3 lb', r: 'none', c: 13.5, p: 13.5 },
+      { n: 'Asian pear', q: '1', r: 'none', c: 1.99, p: 1.99 },
+      { n: 'Soy sauce', q: '1/4 cup', r: 'low', c: 0.35, p: 3.99, a: 'E202', note: 'Brewed soy only \u2014 check the label lists four ingredients, not eight.' },
+      { n: 'Gochujang', q: '2 tbsp', r: 'moderate', c: 0.7, p: 5.49, a: 'Glucose syrup, E202', note: 'Traditional gochujang is chile, rice and fermented soy. Supermarket tubs lead with syrup.' },
+      { n: 'Sesame oil', q: '1 tbsp', r: 'none', c: 0.35, p: 5.99 },
+      { n: 'Garlic & ginger', q: '4 cloves / 3/4 oz', r: 'none', c: 0.65, p: 1.58 },
+      { n: 'Little gem lettuce', q: '3 heads', r: 'none', c: 3.99, p: 3.99 },
+      { n: 'Scallions', q: '4', r: 'none', c: 0.99, p: 0.99 }
     ],
     steps: [
-      'Blitz the pear, garlic, ginger, soy and sesame oil. Marinate the beef 20 minutes — no longer, or it goes mealy.',
+      'Blitz the pear, garlic, ginger, soy and sesame oil. Marinate the beef 20 minutes \u2014 no longer, or it goes mealy.',
       'Get a heavy pan smoking hot. Cook the beef in small batches, 45 seconds a side, so it sears instead of steaming.',
       'Slacken the gochujang with a spoon of water and a little vinegar for the dipping sauce.',
-      'Pile beef into lettuce cups with spring onion, sauce and rice on the side.'
+      'Pile beef into lettuce cups with scallion, sauce and rice on the side.'
     ] },
   { id: 'oats', name: 'Tahini & Date Overnight Oats', cuisine: 'Breakfast',
-    tagline: 'Assemble five jars on Sunday night. Breakfast is solved until Friday.',
+    tagline: 'Assemble the jars on Sunday night. Breakfast is solved until Friday.',
     kcal: 386, protein: 14, carbs: 52, fat: 14, fiber: 9, sugar: 18, satfat: 3, sodium: 95,
-    cost: 0.8, difficulty: 1, prep: 8, cook: 0, servings: 2, cats: ['prep', 'trending'],
+    difficulty: 1, prep: 8, cook: 0, servings: 2, cats: ['prep', 'trending'],
     ing: [
-      { n: 'Rolled oats', q: '120 g', r: 'none' },
-      { n: 'Milk or oat milk', q: '300 ml', r: 'low', a: 'E471, E170 stabilisers', note: 'Barista-style oat milks add emulsifiers and calcium carbonate. Plain oat milk is usually just oats, water and salt.' },
-      { n: 'Medjool dates', q: '4', r: 'none' },
-      { n: 'Tahini', q: '2 tbsp', r: 'none' },
-      { n: 'Chia seeds', q: '1 tbsp', r: 'none' },
-      { n: 'Cinnamon', q: '1/2 tsp', r: 'none' },
-      { n: 'Greek yoghurt', q: '4 tbsp', r: 'none' }
+      { n: 'Rolled oats', q: '1 1/3 cups', r: 'none', c: 0.55, p: 4.49 },
+      { n: 'Milk or oat milk', q: '1 1/4 cups', r: 'low', c: 0.75, p: 4.29, a: 'E471, E170 stabilisers', note: 'Barista-style oat milks add emulsifiers and calcium carbonate. Plain oat milk is usually just oats, water and salt.' },
+      { n: 'Medjool dates', q: '4', r: 'none', c: 1.6, p: 7.99 },
+      { n: 'Tahini', q: '2 tbsp', r: 'none', c: 0.7, p: 7.99 },
+      { n: 'Chia seeds', q: '1 tbsp', r: 'none', c: 0.3, p: 6.99 },
+      { n: 'Cinnamon', q: '1/2 tsp', r: 'none', c: 0.1, p: 3.49 },
+      { n: 'Greek yogurt', q: '1/4 cup', r: 'none', c: 0.6, p: 5.49 }
     ],
     steps: [
       'Stir oats, chia, cinnamon and a pinch of salt together in jars.',
       'Whisk the milk with the tahini until smooth, then pour over. Fridge overnight.',
-      'Chop the dates and layer them in the morning with a spoon of yoghurt so they keep their chew.'
+      'Chop the dates and layer them in the morning with a spoon of yogurt so they keep their chew.'
     ] },
   { id: 'coq', name: 'Coq au Vin', cuisine: 'French',
-    tagline: 'A weekend project. Braise, reduce, glaze — the dish that teaches you patience.',
+    tagline: 'A weekend project. Braise, reduce, glaze \u2014 the dish that teaches you patience.',
     kcal: 587, protein: 42, carbs: 14, fat: 34, fiber: 3, sugar: 5, satfat: 12, sodium: 840,
-    cost: 5.4, difficulty: 5, prep: 30, cook: 105, servings: 4, cats: ['once'],
+    difficulty: 5, prep: 30, cook: 105, servings: 4, cats: ['once'],
     ing: [
-      { n: 'Chicken, jointed', q: '1.8 kg', r: 'none' },
-      { n: 'Red burgundy', q: '750 ml', r: 'none' },
-      { n: 'Smoked lardons', q: '150 g', r: 'moderate', a: 'E250 sodium nitrite', note: 'Cured pork is the one real additive here. Nitrite-free bacon exists and behaves identically in a braise.' },
-      { n: 'Button mushrooms', q: '250 g', r: 'none' },
-      { n: 'Pearl onions', q: '250 g', r: 'none' },
-      { n: 'Plain flour', q: '2 tbsp', r: 'none' },
-      { n: 'Butter', q: '50 g', r: 'none' },
-      { n: 'Thyme & bay', q: '1 bundle', r: 'none' }
+      { n: 'Chicken, jointed', q: '4 lb', r: 'none', c: 11, p: 11 },
+      { n: 'Red burgundy', q: '1 bottle', r: 'none', c: 14, p: 14 },
+      { n: 'Smoked lardons', q: '5 oz', r: 'moderate', c: 4.5, p: 4.5, a: 'E250 sodium nitrite', note: 'Cured pork is the one real additive here. Nitrite-free bacon exists and behaves identically in a braise.' },
+      { n: 'Button mushrooms', q: '9 oz', r: 'none', c: 2.79, p: 2.79 },
+      { n: 'Pearl onions', q: '9 oz', r: 'none', c: 2.49, p: 2.49 },
+      { n: 'All-purpose flour', q: '2 tbsp', r: 'none', c: 0.1, p: 3.49 },
+      { n: 'Butter', q: '3 1/2 tbsp', r: 'none', c: 0.85, p: 4.49 },
+      { n: 'Thyme & bay', q: '1 bundle', r: 'none', c: 1.99, p: 1.99 }
     ],
     steps: [
       'Marinate the chicken in the wine with the herbs overnight. Dry every piece thoroughly before it meets the pan.',
       'Render the lardons, brown the chicken hard in the fat in batches, then dust with flour and cook it out.',
-      'Deglaze with the marinade, bring to a bare simmer and braise covered at 160°C for 75 minutes.',
+      'Deglaze with the marinade, bring to a bare simmer and braise covered at 325\u00b0F for 75 minutes.',
       'Glaze the onions and mushrooms separately in butter until lacquered. Fold in at the end so they stay distinct.',
-      'Reduce the sauce until it coats a spoon. Rest 20 minutes before serving — it tightens as it sits.'
+      'Reduce the sauce until it coats a spoon. Rest 20 minutes before serving \u2014 it tightens as it sits.'
     ] },
   { id: 'harissa-chickpeas', name: 'Sheet-Pan Harissa Chickpeas', cuisine: 'Levantine',
-    tagline: 'One tray, forty minutes, four portions at £1.40 each. The workhorse of meal-prep.',
+    tagline: 'One tray, forty minutes, four portions. The workhorse of meal-prep.',
     kcal: 398, protein: 16, carbs: 46, fat: 16, fiber: 15, sugar: 10, satfat: 2, sodium: 560,
-    cost: 1.4, difficulty: 1, prep: 10, cook: 35, servings: 4, cats: ['prep', 'trending'],
+    difficulty: 1, prep: 10, cook: 35, servings: 4, cats: ['prep', 'trending'],
     ing: [
-      { n: 'Chickpeas', q: '2 tins (800 g)', r: 'none' },
-      { n: 'Sweet potatoes', q: '600 g', r: 'none' },
-      { n: 'Red onions', q: '2', r: 'none' },
-      { n: 'Harissa paste', q: '2 tbsp', r: 'moderate', a: 'E202 potassium sorbate', note: 'Same flag as the shakshuka: buy the jar with the four-word ingredient list.' },
-      { n: 'Greek yoghurt', q: '200 g', r: 'none' },
-      { n: 'Coriander', q: '1 bunch', r: 'none' },
-      { n: 'Olive oil', q: '3 tbsp', r: 'none' },
-      { n: 'Lemon', q: '1', r: 'none' }
+      { n: 'Chickpeas', q: '2 cans (15 oz)', r: 'none', c: 2.58, p: 2.58 },
+      { n: 'Sweet potatoes', q: '1 1/3 lb', r: 'none', c: 1.99, p: 1.99 },
+      { n: 'Red onions', q: '2', r: 'none', c: 1.8, p: 1.8 },
+      { n: 'Harissa paste', q: '2 tbsp', r: 'moderate', c: 0.9, p: 5.49, a: 'E202 potassium sorbate', note: 'Same flag as the shakshuka: buy the jar with the four-word ingredient list.' },
+      { n: 'Greek yogurt', q: '7 oz', r: 'none', c: 1.7, p: 5.49 },
+      { n: 'Cilantro', q: '1 bunch', r: 'none', c: 1.29, p: 1.29 },
+      { n: 'Olive oil', q: '3 tbsp', r: 'none', c: 0.8, p: 9.99 },
+      { n: 'Lemon', q: '1', r: 'none', c: 0.79, p: 0.79 }
     ],
     steps: [
-      'Toss cubed sweet potato and onion wedges with oil, salt and half the harissa. Roast 20 minutes at 220°C.',
+      'Toss cubed sweet potato and onion wedges with oil, salt and half the harissa. Roast 20 minutes at 425\u00b0F.',
       'Drain and thoroughly dry the chickpeas, add to the tray with the rest of the harissa, and roast 15 minutes more until crisp at the edges.',
-      'Whip the yoghurt with lemon juice and salt.',
-      'Portion into four boxes, yoghurt in the lid pot, coriander over at the last moment.'
+      'Whip the yogurt with lemon juice and salt.',
+      'Portion into four boxes, yogurt in the lid pot, cilantro over at the last moment.'
     ] },
   { id: 'ramen', name: 'Shoyu Ramen from Scratch', cuisine: 'Japanese',
     tagline: 'Four hours of broth for eleven minutes of eating. Worth it exactly once a season.',
     kcal: 638, protein: 34, carbs: 74, fat: 24, fiber: 5, sugar: 8, satfat: 8, sodium: 1620,
-    cost: 3.6, difficulty: 5, prep: 40, cook: 240, servings: 4, cats: ['once'],
+    difficulty: 5, prep: 40, cook: 240, servings: 4, cats: ['once'],
     ing: [
-      { n: 'Chicken wings & backs', q: '1.5 kg', r: 'none' },
-      { n: 'Pork belly', q: '500 g', r: 'none' },
-      { n: 'Kombu & dried shiitake', q: '20 g / 15 g', r: 'none' },
-      { n: 'Fresh ramen noodles', q: '4 portions', r: 'low', a: 'E500 kansui salts', note: 'Alkaline salts are what make a ramen noodle springy — functional, not filler. Instant blocks are the ones to avoid.' },
-      { n: 'Instant noodle blocks (shortcut)', q: '4', r: 'high', a: 'E451, TBHQ, palm oil', note: 'Fried, preserved and salted to 1.8 g sodium a block. Using these instead of fresh costs this bowl 20 points.' },
-      { n: 'Soy sauce & mirin', q: '120 ml / 60 ml', r: 'low', a: 'E202', note: 'Brewed soy and true mirin only; "mirin-style seasoning" is corn syrup.' },
-      { n: 'Eggs', q: '4', r: 'none' },
-      { n: 'Spring onions & nori', q: 'to finish', r: 'none' }
+      { n: 'Chicken wings & backs', q: '3 1/4 lb', r: 'none', c: 6.5, p: 6.5 },
+      { n: 'Pork belly', q: '1 lb', r: 'none', c: 8.99, p: 8.99 },
+      { n: 'Kombu & dried shiitake', q: '3/4 oz / 1/2 oz', r: 'none', c: 3.2, p: 12.98 },
+      { n: 'Fresh ramen noodles', q: '4 portions', r: 'low', c: 4.99, p: 4.99, a: 'E500 kansui salts', note: 'Alkaline salts are what make a ramen noodle springy \u2014 functional, not filler. Instant blocks are the ones to avoid: fried, preserved with TBHQ and salted to 1.8 g sodium each.' },
+      { n: 'Soy sauce & mirin', q: '1/2 cup / 1/4 cup', r: 'low', c: 1.3, p: 8.48, a: 'E202', note: 'Brewed soy and true mirin only; "mirin-style seasoning" is corn syrup.' },
+      { n: 'Eggs', q: '4', r: 'none', c: 1.2, p: 4.29 },
+      { n: 'Scallions & nori', q: 'to finish', r: 'none', c: 1.49, p: 5.48 }
     ],
     steps: [
       'Blanch the bones for 10 minutes, rinse away every trace of scum, then simmer fresh water at a bare tremble for 4 hours.',
       'Cold-steep the kombu and shiitake separately for the dashi. Never boil the kombu.',
       'Roll and tie the pork belly, braise it in the soy and mirin tare for 2 hours, then chill and slice thin.',
       'Marinate soft-boiled eggs in the cooled tare for 6 hours.',
-      'Assemble fast and hot: tare in the bowl, broth, noodles cooked to the second, then pork, egg, onion, nori.'
+      'Assemble fast and hot: tare in the bowl, broth, noodles cooked to the second, then pork, egg, scallion, nori.'
     ] },
   { id: 'palak-paneer', name: 'Palak Paneer', cuisine: 'North Indian',
     tagline: 'Blanch the spinach, shock it cold, and the sauce stays a shocking green.',
     kcal: 424, protein: 22, carbs: 18, fat: 30, fiber: 7, sugar: 6, satfat: 14, sodium: 620,
-    cost: 2.6, difficulty: 3, prep: 15, cook: 25, servings: 4, cats: ['once', 'prep'],
+    difficulty: 3, prep: 15, cook: 25, servings: 4, cats: ['once', 'prep'],
     ing: [
-      { n: 'Spinach', q: '600 g', r: 'none' },
-      { n: 'Paneer', q: '400 g', r: 'none' },
-      { n: 'Onion, tomato, ginger, garlic', q: '1 / 2 / 20 g / 4 cloves', r: 'none' },
-      { n: 'Green chillies', q: '2', r: 'none' },
-      { n: 'Garam masala & cumin', q: '1 tsp each', r: 'none' },
-      { n: 'Double cream', q: '60 ml', r: 'none' },
-      { n: 'Ghee', q: '2 tbsp', r: 'none' },
-      { n: 'Kasuri methi', q: '1 tsp', r: 'none' }
+      { n: 'Spinach', q: '1 1/3 lb', r: 'none', c: 3.99, p: 3.99 },
+      { n: 'Paneer', q: '14 oz', r: 'none', c: 5.99, p: 5.99 },
+      { n: 'Onion, tomato, ginger, garlic', q: '1 / 2 / 3/4 oz / 4 cloves', r: 'none', c: 2.4, p: 2.4 },
+      { n: 'Green chiles', q: '2', r: 'none', c: 0.4, p: 1.29 },
+      { n: 'Garam masala & cumin', q: '1 tsp each', r: 'none', c: 0.3, p: 6.98 },
+      { n: 'Heavy cream', q: '1/4 cup', r: 'none', c: 0.9, p: 3.49 },
+      { n: 'Ghee', q: '2 tbsp', r: 'none', c: 0.7, p: 8.99 },
+      { n: 'Kasuri methi', q: '1 tsp', r: 'none', c: 0.2, p: 4.49 }
     ],
     steps: [
-      'Blanch the spinach 45 seconds, then straight into iced water. Squeeze dry and blend with the chillies to a coarse purée.',
+      'Blanch the spinach 45 seconds, then straight into iced water. Squeeze dry and blend with the chiles to a coarse pur\u00e9e.',
       'Fry the cumin in ghee, then the onion until golden, then ginger-garlic, then tomato until the fat splits away.',
       'Pan-fry the paneer cubes gold on two sides and rest them in warm salted water so they stay soft.',
-      'Fold the purée into the masala over low heat — never boil it — then the cream, crushed methi and paneer.'
+      'Fold the pur\u00e9e into the masala over low heat \u2014 never boil it \u2014 then the cream, crushed methi and paneer.'
     ] }
 ];
 
 const STORES = [
-  { name: 'Harvest & Co. Grocer', type: 'Independent grocer', km: 0.4, price: '££', hours: '7am–9pm', has: 'Strong on produce, dairy and bulk grains. Best tomatoes within a mile.', keys: ['tomato', 'pepper', 'egg', 'onion', 'carrot', 'spinach', 'broccoli', 'potato', 'lettuce', 'cucumber', 'lemon', 'herb', 'parsley', 'coriander', 'garlic', 'ginger', 'chilli', 'date', 'oat', 'yoghurt', 'butter', 'milk', 'cream', 'feta', 'paneer'] },
-  { name: 'Meridian Market', type: 'Supermarket', km: 0.9, price: '£', hours: '6am–11pm', has: 'Cheapest staples, tins and dry goods. Open when nothing else is.', keys: ['lentil', 'chickpea', 'bean', 'rice', 'pasta', 'flour', 'stock', 'vinegar', 'sugar', 'salt', 'oil', 'tin', 'noodle', 'bread', 'flatbread'] },
-  { name: 'Sabor Latin Foods', type: 'Speciality', km: 1.2, price: '££', hours: '9am–8pm', has: 'Chillies, masa, preserved lemon, harissa without the preservatives.', keys: ['harissa', 'preserved lemon', 'chilli flake', 'almond', 'tahini'] },
-  { name: 'Nishiki Japanese Store', type: 'Speciality', km: 1.8, price: '£££', hours: '10am–7pm', has: 'Miso, brewed shoyu, true mirin, kombu, fresh ramen noodles.', keys: ['miso', 'soy', 'mirin', 'nori', 'kombu', 'shiitake', 'sesame', 'gochujang', 'ramen', 'pear', 'dashi'] },
-  { name: 'Green Row Farmers Market', type: 'Saturday market', km: 2.3, price: '££', hours: 'Sat 8am–2pm', has: 'Seasonal veg, pasture eggs, whole chickens, honey. Cash preferred.', keys: ['chicken', 'beef', 'pork', 'salmon', 'thigh', 'sirloin', 'belly', 'lardon', 'mushroom', 'sweet potato', 'wine'] }
+  { name: 'Harvest & Co. Grocer', type: 'Independent grocer', mi: 0.3, price: '$$', hours: '7am–9pm', has: 'Strong on produce, dairy and bulk grains. Best tomatoes within a mile.', keys: ['tomato', 'bell pepper', 'egg', 'onion', 'scallion', 'carrot', 'spinach', 'broccoli', 'potato', 'lettuce', 'cucumber', 'lemon', 'herb', 'parsley', 'cilantro', 'garlic', 'ginger', 'chile', 'date', 'oat', 'yogurt', 'butter', 'milk', 'cream', 'feta', 'paneer'] },
+  { name: 'Meridian Market', type: 'Supermarket', mi: 0.6, price: '$', hours: '6am–11pm', has: 'Cheapest staples, cans and dry goods. Open when nothing else is.', keys: ['lentil', 'chickpea', 'bean', 'rice', 'pasta', 'flour', 'stock', 'vinegar', 'sugar', 'salt', 'oil', 'can', 'noodle', 'bread', 'flatbread'] },
+  { name: 'Sabor Latin Foods', type: 'Specialty', mi: 0.8, price: '$$', hours: '9am–8pm', has: 'Chiles, masa, preserved lemon, harissa without the preservatives.', keys: ['harissa', 'preserved lemon', 'pepper flake', 'almond', 'tahini'] },
+  { name: 'Nishiki Japanese Store', type: 'Specialty', mi: 1.1, price: '$$$', hours: '10am–7pm', has: 'Miso, brewed shoyu, true mirin, kombu, fresh ramen noodles.', keys: ['miso', 'soy', 'mirin', 'nori', 'kombu', 'shiitake', 'sesame', 'gochujang', 'ramen', 'pear', 'dashi'] },
+  { name: 'Green Row Farmers Market', type: 'Saturday market', mi: 1.4, price: '$$', hours: 'Sat 8am–2pm', has: 'Seasonal produce, pasture eggs, whole chickens, honey. Cash preferred.', keys: ['chicken', 'beef', 'pork', 'salmon', 'thigh', 'sirloin', 'belly', 'lardon', 'mushroom', 'sweet potato', 'wine'] }
 ];
 
 const DELIVERY = [
@@ -1088,7 +1125,7 @@ function scale(v, lo, hi, max) { return clamp((v - lo) / (hi - lo), 0, 1) * max;
 function gradeOf(score) { return GRADES.find(function (g) { return score >= g.min; }); }
 
 /* Nutrition is deliberately hard to max: the four penalties are scaled off
-   tight anchors and weighted 3×, while the fibre/protein credit is capped
+   tight anchors and weighted 3×, while the fiber/protein credit is capped
    well below them. A rich braise should land in the 20s, not the 70s. */
 function scoreRecipe(r) {
   const neg = scale(r.kcal, 200, 750, 10) + scale(r.satfat, 1, 12, 12) +
@@ -1111,7 +1148,13 @@ class Component extends DCLogic {
     this.recipes = RAW.map(function (r) {
       const s = scoreRecipe(r);
       const g = gradeOf(s.score);
+      /* Cost is built from the ingredient list, not hand-set: `c` is what the
+         recipe's share of an ingredient costs, `p` is the smallest pack you
+         can actually buy. Per serving comes off the used total. */
+      const used = r.ing.reduce(function (a, i) { return a + (i.c || 0); }, 0);
+      const pack = r.ing.reduce(function (a, i) { return a + (i.p || 0); }, 0);
       return Object.assign({}, r, {
+        usedCost: used, packCost: pack, cost: used / r.servings,
         score: s.score, parts: s, grade: g.g, color: g.c, gradeLabel: g.label,
         time: r.prep + r.cook, diffLabel: DIFF[r.difficulty] + ' · ' + r.difficulty + '/5',
         slotId: 'mise-' + r.id, slotIdB: 'mise-b-' + r.id, slotIdC: 'mise-c-' + r.id, slotHint: r.name.toLowerCase()
@@ -1120,7 +1163,7 @@ class Component extends DCLogic {
     this.state = Object.assign({
       screen: 'scan', filter: 'all', day: Math.max(0, (new Date().getDay() + 6) % 7),
       recipeId: null, dayPickerFor: null, settingsOpen: false,
-      apiKey: '', keyDraft: '', model: 'gemini-2.5-flash', target: 2100,
+      apiKey: '', keyDraft: '', model: 'gemini-3.6-flash', target: 2100,
       entries: [], plan: {}, bought: {}, coords: null,
       photoOverrides: {}, photoBusy: false,
       scanStage: 'idle', scanImg: null, scanResult: null, scanError: null, scanStatus: '',
@@ -1135,8 +1178,11 @@ class Component extends DCLogic {
       const raw = localStorage.getItem(LS);
       if (!raw) return {};
       const d = JSON.parse(raw);
+      /* Retired or invented model names get migrated to ones the API serves. */
+      const SERVED = { 'gemini-3.6-flash': 1, 'gemini-pro-latest': 1 };
+      const model = SERVED[d.model] ? d.model : 'gemini-3.6-flash';
       return {
-        apiKey: d.apiKey || '', model: d.model || 'gemini-2.5-flash',
+        apiKey: d.apiKey || '', model: model,
         target: d.target || 2100, entries: Array.isArray(d.entries) ? d.entries : [],
         plan: d.plan && typeof d.plan === 'object' ? d.plan : {},
         bought: d.bought && typeof d.bought === 'object' ? d.bought : {},
@@ -1232,7 +1278,7 @@ class Component extends DCLogic {
   async gemini(parts, schema, temp) {
     const key = (this.state.apiKey || '').trim();
     if (!key) throw new Error('nokey');
-    const model = this.state.model || 'gemini-2.5-flash';
+    const model = this.state.model || 'gemini-3.6-flash';
     const url = 'https://generativelanguage.googleapis.com/v1beta/models/' + model +
                 ':generateContent?key=' + encodeURIComponent(key);
     const res = await fetch(url, {
@@ -1302,12 +1348,12 @@ class Component extends DCLogic {
       },
       required: ['dishName', 'confidence', 'portionEstimate', 'kcal', 'protein', 'carbs', 'fat', 'healthScore', 'grade', 'verdict', 'betterSwap', 'ingredients']
     };
-    const prompt = 'You are the food-analysis engine for a cooking and nutrition app. Analyse this photograph of a meal.\n' +
-      'Rules: identify the dish specifically (not "a plate of food"). Estimate the portion actually visible in grams or household units. ' +
-      'Give per-portion nutrition for what is shown. healthScore is 0-100 weighing nutrition density 65%, processed/additive load 25%, whole-food share 10%. Be strict: a rich restaurant-style main with high saturated fat or sodium belongs in the 30s-40s, a whole-food vegetable and pulse dish in the 80s-90s; ' +
+    const prompt = 'You are the food-analysis engine for a cooking and nutrition app. Analyze this photograph of a meal.\n' +
+      'Rules: identify the dish specifically (not "a plate of food"). Estimate the portion actually visible in US customary units — ounces, pounds or cups, never grams. ' +
+      'Give per-portion nutrition for what is shown, in US label units — energy as Calories, macros in grams, sodium in milligrams. healthScore is 0-100 weighing nutrition density 65%, processed/additive load 25%, whole-food share 10%. Be strict: a rich restaurant-style main with high saturated fat or sodium belongs in the 30s-40s, a whole-food vegetable and pulse dish in the 80s-90s; ' +
       'grade is A (80+), B (65+), C (50+), D (35+) or E. For each visible or strongly implied component set risk to exactly one of ' +
       '"none", "low", "moderate", "high" — "none" for whole foods, higher for processed items, naming the likely additive in note (one short sentence). ' +
-      'costEstimate is the approximate cost of the portion in GBP. verdict is one honest sentence. betterSwap is one specific, actionable improvement. ' +
+      'costEstimate is the approximate cost of the portion in US dollars. verdict is one honest sentence. betterSwap is one specific, actionable improvement. ' +
       'If the image is not food, set dishName to "Not food" and confidence to 0.';
 
     try {
@@ -1329,7 +1375,7 @@ class Component extends DCLogic {
   }
 
   shapeScan(o, source) {
-    const cur = this.props.currency || '£';
+    const cur = this.props.currency || '$';
     const g = gradeOf(Math.round(o.healthScore || 0));
     return {
       dishName: o.dishName || 'Unidentified dish',
@@ -1345,7 +1391,7 @@ class Component extends DCLogic {
       carbs: Math.round(o.carbs || 0), fat: Math.round(o.fat || 0),
       cost: o.costEstimate || 0, costLabel: money(o.costEstimate || 0, cur),
       macros: [
-        { label: 'kcal', value: Math.round(o.kcal || 0) },
+        { label: 'cal', value: Math.round(o.kcal || 0) },
         { label: 'protein', value: Math.round(o.protein || 0) + 'g' },
         { label: 'carbs', value: Math.round(o.carbs || 0) + 'g' },
         { label: 'fat', value: Math.round(o.fat || 0) + 'g' }
@@ -1375,15 +1421,15 @@ class Component extends DCLogic {
       required: ['picks']
     };
     const fallback = [
-      { dish: 'Charred broccoli & white bean salad', why: 'Highest-scoring dish in your library and the cheapest per serving. Fifteen grams of fibre.' },
-      { dish: 'Sheet-pan harissa chickpeas', why: 'One tray, four portions, £1.40 each. Batch it Sunday and lunch is done.' },
+      { dish: 'Green lentil & preserved lemon soup', why: 'The cheapest serving in your library at $1.75, and 14 g of fiber a bowl. One pot, four days of lunch.' },
+      { dish: 'Sheet-pan harissa chickpeas', why: 'One tray, four portions, $2.96 a serving. Batch it Sunday and lunch is done.' },
       { dish: 'Miso-butter salmon bowl', why: 'You are light on omega-3 this week and it is on the table in fifteen minutes.' }
     ];
     try {
       const out = await this.gemini([{
         text: 'You advise a home cook using a nutrition-scoring cooking app. Recently logged: ' + logged +
               '. Dishes planned this week: ' + planned + '. Daily calorie target: ' + (this.props.calorieTarget || this.state.target) +
-              '. Suggest exactly 3 dishes to cook next. Favour whole ingredients, low additive load, under £5 a serving. ' +
+              '. Suggest exactly 3 dishes to cook next. Favour whole ingredients, low additive load, under $5 a serving. ' +
               'For each give "dish" (the dish name only) and "why" (one specific sentence tying it to their pattern — no filler).'
       }], schema, 0.8);
       this.setState({ aiPicks: (out.picks || fallback).slice(0, 3), aiBusy: false });
@@ -1467,9 +1513,39 @@ class Component extends DCLogic {
   listText() {
     const rows = this.shoppingRows();
     if (!rows.length) return '';
+    const t = this.groceryTotals();
+    const cur = this.props.currency || '$';
     return 'Mise shopping list\n' + rows.map(function (s) {
-      return '- ' + s.name + ' (' + s.qty + ')';
-    }).join('\n') + '\n';
+      return '- ' + s.name + ' (' + s.qty + ')  ' + money(s.pack, cur);
+    }).join('\n') +
+    '\n\nFull shop, every pack: ' + t.packLabel +
+    '\nFood the recipes actually use: ' + t.usedLabel +
+    '\n' + t.meals + ' dishes / ' + t.servings + ' servings — ' + t.perServingLabel + ' per serving\n';
+  }
+
+  groceryTotals() {
+    const cur = this.props.currency || '$';
+    const plan = this.state.plan;
+    const self = this;
+    let used = 0, servings = 0, meals = 0;
+    Object.keys(plan).forEach(function (d) {
+      (plan[d] || []).forEach(function (id) {
+        const r = self.byId(id);
+        if (!r) return;
+        used += r.usedCost;
+        servings += r.servings;
+        meals++;
+      });
+    });
+    /* One jar of harissa covers the whole week, so the shop total is the sum of
+       unique packs — not the sum of each recipe's share. */
+    const packTotal = this.shoppingRows().reduce(function (a, row) { return a + (row.pack || 0); }, 0);
+    return {
+      meals: meals, servings: servings,
+      packLabel: money(packTotal, cur), usedLabel: money(used, cur),
+      perServingLabel: servings ? money(used / servings, cur) : money(0, cur),
+      perMealLabel: meals ? money(used / meals, cur) : money(0, cur)
+    };
   }
   copyList = () => {
     const text = this.listText();
@@ -1526,7 +1602,7 @@ class Component extends DCLogic {
   matchFilter(r) {
     switch (this.state.filter) {
       case 'quick': return r.time <= 30;
-      case 'cheap': return r.cost <= 2;
+      case 'cheap': return r.cost <= 3;
       case 'topgrade': return r.score >= 65;
       case 'protein': return r.protein >= 25;
       case 'veg': return ['salmon-bowl', 'adobo', 'bulgogi', 'coq', 'ramen'].indexOf(r.id) < 0;
@@ -1543,14 +1619,15 @@ class Component extends DCLogic {
         const r = self.byId(id);
         if (!r) return;
         r.ing.forEach(function (i) {
-          if (!map[i.n]) map[i.n] = { name: i.n, qtys: [], risk: i.r };
+          if (!map[i.n]) map[i.n] = { name: i.n, qtys: [], risk: i.r, pack: i.p || 0 };
           map[i.n].qtys.push(i.q);
+          map[i.n].pack = Math.max(map[i.n].pack, i.p || 0);
         });
       });
     });
     return Object.keys(map).map(function (k) {
       const m = map[k];
-      return { name: m.name, risk: m.risk, qty: m.qtys.length > 1 ? m.qtys.length + '×' : m.qtys[0] };
+      return { name: m.name, risk: m.risk, pack: m.pack, qty: m.qtys.length > 1 ? m.qtys.length + '×' : m.qtys[0] };
     }).sort(function (a, b) { return a.name.localeCompare(b.name); });
   }
 
@@ -1566,7 +1643,7 @@ class Component extends DCLogic {
   renderVals() {
     const s = this.state;
     const self = this;
-    const cur = this.props.currency || '£';
+    const cur = this.props.currency || '$';
     const target = this.props.calorieTarget || s.target;
     const emphasis = this.props.scoreEmphasis || 'subtle';
     const today = new Date().toISOString().slice(0, 10);
@@ -1593,7 +1670,7 @@ class Component extends DCLogic {
       .map(function (r, i) { return dress(r, { rank: (i + 1) + '.' }); });
 
     const filterDefs = [
-      ['all', 'Everything'], ['quick', 'Under 30 min'], ['cheap', 'Under ' + cur + '2'],
+      ['all', 'Everything'], ['quick', 'Under 30 min'], ['cheap', 'Under ' + cur + '3 a serving'],
       ['topgrade', 'Grade A & B'], ['protein', 'High protein'], ['veg', 'Meat-free']
     ];
     const filters = filterDefs.map(function (f) {
@@ -1634,6 +1711,7 @@ class Component extends DCLogic {
     const shopping = this.shoppingRows().map(function (row) {
       const done = !!s.bought[row.name];
       return Object.assign({}, row, {
+        packLabel: money(row.pack, cur),
         toggle: self.toggleBought(row.name),
         boxBg: done ? '#8FC08A' : '#FFFFFF', boxBorder: done ? '#8FC08A' : '#CFC6B6',
         fg: done ? '#A79C8C' : '#24201B', strike: done ? 'line-through' : 'none'
@@ -1665,7 +1743,7 @@ class Component extends DCLogic {
     });
     const near = s.coords ? ' near ' + s.coords.lat + ',' + s.coords.lng : '';
     const stores = STORES.slice().sort(function (a, b) {
-      return (needsByStore[b.name] || []).length - (needsByStore[a.name] || []).length || a.km - b.km;
+      return (needsByStore[b.name] || []).length - (needsByStore[a.name] || []).length || a.mi - b.mi;
     }).map(function (st) {
       const needs = (needsByStore[st.name] || []).slice(0, 6);
       return Object.assign({}, st, {
@@ -1680,8 +1758,14 @@ class Component extends DCLogic {
 
     const r = this.current();
     const recipe = r ? Object.assign(dress(r), {
+      usedLabel: money(r.usedCost, cur),
+      packLabel: money(r.packCost, cur),
+      hasSource: !!r.source,
+      sourceName: r.source ? r.source.name : '',
+      sourceUrl: r.source ? r.source.url : '',
+      refUrl: 'https://www.google.com/search?q=' + encodeURIComponent(r.name + ' recipe method'),
       macros: [
-        { label: 'kcal', value: r.kcal }, { label: 'protein', value: r.protein + 'g' },
+        { label: 'cal', value: r.kcal }, { label: 'protein', value: r.protein + 'g' },
         { label: 'carbs', value: r.carbs + 'g' }, { label: 'fat', value: r.fat + 'g' }
       ],
       breakdown: [
@@ -1693,7 +1777,7 @@ class Component extends DCLogic {
       steps2: r.steps.map(function (t, i) { return { n: String(i + 1).padStart(2, '0'), text: t }; }),
       ing: r.ing.map(function (i) {
         const rk = RISK[i.r];
-        return Object.assign({}, i, { color: rk.color, color2: rk.color2, riskLabel: rk.label, note: (this.props && this.props.showAdditives === false) ? '' : i.note });
+        return Object.assign({}, i, { color: rk.color, color2: rk.color2, riskLabel: rk.label, cLabel: money(i.c || 0, cur), note: (this.props && this.props.showAdditives === false) ? '' : i.note });
       }, this)
     }) : null;
 
@@ -1719,7 +1803,7 @@ class Component extends DCLogic {
       showCardScore: emphasis === 'bold', hideCardScore: emphasis !== 'bold',
       featuredLead: emphasis === 'bold'
         ? featured.score + '/100'
-        : featured.kcal + ' kcal · ' + featured.protein + 'g protein',
+        : featured.kcal + ' cal · ' + featured.protein + 'g protein',
 
       aiPicks: s.aiPicks, aiBusy: s.aiBusy,
       aiButtonLabel: s.aiBusy ? 'Thinking…' : (s.aiPicks ? 'Ask again' : 'Get three suggestions'),
@@ -1731,6 +1815,7 @@ class Component extends DCLogic {
       dayTotals: { kcal: dayKcal || '—', cost: dayCost ? money(dayCost, cur) : '—', score: dayAvg || '—', color: dayAvg ? gradeOf(dayAvg).c : '#24201B' },
       autoFillDay: this.autoFillDay, shopping: shopping, listEmpty: shopping.length === 0,
       listMeta: shopping.length + ' items', copyList: this.copyList,
+      grocery: this.groceryTotals(),
       downloadList: this.downloadList,
       shareLabel: typeof navigator !== 'undefined' && navigator.share ? 'Share list' : 'Copy list',
 
@@ -1768,8 +1853,8 @@ class Component extends DCLogic {
       keyDraft: s.keyDraft, onKeyInput: this.onKeyInput, saveKey: this.saveKey, clearKey: this.clearKey,
       saveKeyLabel: s.keyDraft && s.keyDraft === s.apiKey ? 'Saved' : 'Save key',
       modelOptions: [
-        { id: 'gemini-2.5-flash', label: '2.5 Flash' },
-        { id: 'gemini-2.5-pro', label: '2.5 Pro' }
+        { id: 'gemini-3.6-flash', label: '3.6 Flash' },
+        { id: 'gemini-pro-latest', label: 'Pro (latest)' }
       ].map(function (m) {
         const on = s.model === m.id;
         return { label: m.label, pick: self.pickModel(m.id), bg: on ? '#24201B' : '#F7F3EC', fg: on ? '#F7F3EC' : '#6E6559', border: on ? '#24201B' : '#DCD2C4' };
