@@ -66,6 +66,18 @@ Each of the twelve dishes was matched to an Unsplash photo through the Search AP
 
 Every photo carries the attribution Unsplash requires ("Photo by … on Unsplash", linked to the photographer), rendered by the image tile itself — that is why dish headers sit at the top of their images, leaving the bottom-left corner clear. Drag any image file onto a tile to override it with your own shot.
 
+## Dark mode
+
+Every surface, border and ink colour is a CSS variable declared in the component's `<helmet>` (`--m-bg`, `--m-surface`, `--m-ink`, `--m-inv-bg`, …) with the light value inlined as the fallback, so the page paints correctly before any JavaScript runs. Switching theme sets `data-theme="dark"` on `<html>` and the variable block does the rest — no per-element restyling.
+
+**Settings → Appearance** offers Light / Dark / **System**. System follows `prefers-color-scheme` and reacts live if the OS flips at sunset. The PWA `theme-color` meta updates with the choice, so the phone's status bar matches.
+
+## Recommendations, saving, and refresh
+
+- **Recommended for you** reads your log and states its reasoning per pick: a protein shortfall against your target, protein per dollar, time to table, or plain score. Dishes you have logged recently drop out of the pool.
+- **Saved** — the ♡ on any card or recipe sheet adds it to a rail at the top of Discover. Stored in local storage with the rest of your data.
+- **Refresh** is automatic: feed position is `launches + hours elapsed + manual shuffles`. It moves every time you open the app, again on the hour while it sits open, and immediately when you hit **↻ Shuffle**. Because it rotates rather than randomises, repeated refreshes walk the whole library instead of repeating the same four dishes.
+
 ## How costs work
 
 Two numbers, because they answer different questions:
